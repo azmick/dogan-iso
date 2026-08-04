@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
 import { slugField } from '../fields/slug'
+import { previewUrl } from '../lib/adminPreview'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -13,8 +14,11 @@ export const Pages: CollectionConfig = {
     group: 'İçerik',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'showInCorporateMenu', 'updatedAt'],
+    listSearchableFields: ['title', 'slug'],
     description:
-      'Kurumsal / yasal içerik sayfaları (KVKK Aydınlatma Metni, Çerez Politikası vb.). Adres: /sayfa-url-adi',
+      'Kurumsal ve yasal metin sayfaları: KVKK Aydınlatma Metni, Çerez Politikası, Başvuru Formu vb. Adresleri "site.com/sayfa-adi" biçimindedir.',
+    preview: previewUrl(''),
+    pagination: { defaultLimit: 25 },
   },
   access: {
     read: anyone,
@@ -28,6 +32,10 @@ export const Pages: CollectionConfig = {
       type: 'text',
       label: 'Sayfa Başlığı',
       required: true,
+      admin: {
+        placeholder: 'Örn: KVKK Aydınlatma Metni',
+        description: 'Sayfanın en üstünde görünen başlık ve menüdeki adı.',
+      },
     },
     {
       name: 'excerpt',
@@ -35,13 +43,19 @@ export const Pages: CollectionConfig = {
       label: 'Kısa Açıklama',
       maxLength: 300,
       admin: {
-        description: 'Arama motorlarına verilecek varsayılan açıklama.',
+        placeholder: 'Sayfanın konusunu bir iki cümleyle özetleyin.',
+        description:
+          'Google arama sonuçlarında başlığın altında görünen açıklama. Boş bırakılırsa site geneli açıklama kullanılır.',
       },
     },
     {
       name: 'content',
       type: 'richText',
-      label: 'İçerik',
+      label: 'Sayfa Metni',
+      admin: {
+        description:
+          'Sayfanın tam metni. Word veya benzeri bir programdan yapıştırdığınız metinler biçimlendirmesiyle birlikte gelir.',
+      },
     },
     slugField(),
     {
@@ -51,16 +65,18 @@ export const Pages: CollectionConfig = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'Üst menüdeki "Kurumsal" açılır listesinde görünsün mü?',
+        description:
+          'İşaretliyse sayfa, üst menüdeki "Kurumsal" açılır listesinde görünür. Yalnızca adresi bilenlerin görmesini istiyorsanız işareti kaldırın.',
       },
     },
     {
       name: 'menuOrder',
       type: 'number',
-      label: 'Menü Sırası',
+      label: 'Menüdeki Sırası',
       defaultValue: 100,
       admin: {
         position: 'sidebar',
+        description: 'Küçük sayı menüde daha üstte görünür.',
         condition: (data) => Boolean(data?.showInCorporateMenu),
       },
     },

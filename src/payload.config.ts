@@ -6,6 +6,8 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig, type Plugin } from 'payload'
+import { en } from 'payload/i18n/en'
+import { tr } from 'payload/i18n/tr'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -118,6 +120,41 @@ const plugins: Plugin[] = [
   }),
 ]
 
+/**
+ * MCP eklentisinin eklediği `payload-mcp-api-keys` koleksiyonu varsayılan olarak
+ * İngilizce etiketlerle ("API Keys") ve kendi başına bir "MCP" menü grubunda çıkıyor.
+ * İçerik editörü için anlamsız olduğundan Türkçeleştirip menünün sonundaki
+ * "Gelişmiş" grubuna alıyoruz.
+ *
+ * `order` mcpPlugin'in order'ından (10) büyük olmalı — Payload eklentileri
+ * order'a göre sıralar ve koleksiyon ancak mcpPlugin çalıştıktan sonra var olur.
+ */
+const localizeMcpKeysCollection: Plugin = (incomingConfig) => ({
+  ...incomingConfig,
+  collections: (incomingConfig.collections ?? []).map((collection) => {
+    if (collection.slug !== 'payload-mcp-api-keys') return collection
+
+    return {
+      ...collection,
+      labels: {
+        singular: 'MCP Erişim Anahtarı',
+        plural: 'MCP Erişim Anahtarları',
+      },
+      admin: {
+        ...collection.admin,
+        group: 'Gelişmiş',
+        description:
+          'Teknik ayar — yapay zekâ araçlarının siteyi güncellemesi için üretilen erişim anahtarları. İçerik düzenlemek için bu bölüme girmenize gerek yoktur.',
+      },
+    }
+  }),
+})
+
+localizeMcpKeysCollection.order = 20
+localizeMcpKeysCollection.slug = 'dogan-iso/localize-mcp-keys'
+
+plugins.push(localizeMcpKeysCollection)
+
 // BLOB_READ_WRITE_TOKEN tanımlıysa yüklemeler Vercel Blob'a gider.
 // Token yoksa (ilk kurulum / yerel geliştirme) eklenti devre dışı kalır.
 if (process.env.BLOB_READ_WRITE_TOKEN) {
@@ -142,8 +179,33 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: '— Yönetim Paneli',
+      titleSuffix: ' — Yönetim Paneli',
+      description:
+        'ISO belgelendirme tanıtım sitesinin içerik yönetim paneli. Sayfalar, haberler, hizmetler ve iletişim bilgileri buradan güncellenir.',
     },
+    // Panel açık kalırken oturumun kendiliğinden düşmesini engeller —
+    // yazı yazarken oturumu kapanan editör, yazdıklarını kaybetmesin.
+    autoRefresh: true,
+    // Türkçe tarih gösterimi (gg.aa.yyyy).
+    dateFormat: 'dd.MM.yyyy HH:mm',
+    components: {
+      graphics: {
+        Icon: '/admin/components/graphics/Icon#AdminIcon',
+        Logo: '/admin/components/graphics/Logo#AdminLogo',
+      },
+      beforeLogin: ['/admin/components/BeforeLogin#BeforeLogin'],
+      beforeNavLinks: ['/admin/components/NavShortcuts#NavShortcuts'],
+      beforeDashboard: ['/admin/components/Dashboard#AdminDashboard'],
+    },
+  },
+  /**
+   * Panel arayüzü Türkçe açılır. Payload'ın hazır Türkçe çevirileri
+   * ("Kaydet", "Sil", "Yeni ... oluştur" vb.) kullanılır; kullanıcı isterse
+   * sağ üstteki hesap ekranından İngilizceye geçebilir.
+   */
+  i18n: {
+    fallbackLanguage: 'tr',
+    supportedLanguages: { tr, en },
   },
   collections: [Services, Posts, Projects, Pages, Faq, Media, ContactSubmissions, Users],
   globals: [SiteSettings, ContactInfo],

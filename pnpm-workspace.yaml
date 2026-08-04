@@ -1,4 +1,6 @@
 allowBuilds:
+  # sass'ın izleme (watch) modu için; derleme sırasında gerekmiyor.
+  '@parcel/watcher': false
   esbuild: true
   sharp: true
   unrs-resolver: true

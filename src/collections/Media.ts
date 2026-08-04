@@ -6,12 +6,16 @@ export const Media: CollectionConfig = {
   slug: 'media',
   labels: {
     singular: 'Görsel / Dosya',
-    plural: 'Medya',
+    plural: 'Medya Kütüphanesi',
   },
   admin: {
     group: 'İçerik',
     useAsTitle: 'alt',
-    description: 'Sitede kullanılan tüm görseller ve dosyalar.',
+    defaultColumns: ['filename', 'alt', 'updatedAt'],
+    listSearchableFields: ['alt', 'filename', 'caption'],
+    description:
+      'Sitede kullanılan tüm fotoğraf ve belgeler. Bir görseli buraya bir kez yükleyip birden fazla sayfada kullanabilirsiniz.',
+    pagination: { defaultLimit: 24 },
   },
   access: {
     read: anyone,
@@ -23,23 +27,28 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      label: 'Alternatif Metin (alt)',
+      label: 'Alternatif Metin',
       required: true,
       admin: {
+        placeholder: 'Örn: Denetim toplantısında masada oturan üç kişi',
         description:
-          'Görselin içeriğini kısaca anlatır. SEO ve erişilebilirlik için zorunludur.',
+          'Görselde ne olduğunu kısaca yazın. Görme engelli ziyaretçilere okunur ve Google için önemlidir — bu yüzden zorunludur.',
       },
     },
     {
       name: 'caption',
       type: 'text',
-      label: 'Açıklama (opsiyonel)',
+      label: 'Alt Yazı (isteğe bağlı)',
+      admin: {
+        description: 'Galeride görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.',
+      },
     },
   ],
   upload: {
     // Vercel Blob eklentisi devredeyken dosyalar Blob'a yüklenir.
     mimeTypes: ['image/*', 'application/pdf'],
     focalPoint: true,
+    displayPreview: true,
     imageSizes: [
       { name: 'thumbnail', width: 480, height: 320, position: 'centre' },
       { name: 'card', width: 800, height: 600, position: 'centre' },

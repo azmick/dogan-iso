@@ -90,7 +90,13 @@ Genel his: temiz, ferah, kurumsal, "soğuk". Sıcak renk (turuncu/kırmızı/sar
 
 Tipografi: Modern, okunaklı bir sans-serif (ör. Inter) — next/font ile. Başlıklar kalın ve net; gövde rahat okunur satır yüksekliğiyle.
 
-Yönetim paneli (Payload admin) teması: Şimdilik Payload'ın varsayılan admin arayüzünü OLDUĞU GİBİ bırak, özelleştirme yapma. İleride bu paletle markalanacak; o iş sonraki aşamada yapılacak. Şu an admin görünümüne zaman harcama.
+Yönetim paneli (Payload admin) teması: TAMAMLANDI. Panel arayüzü aynı soğuk mavi/beyaz paletle markalandı ve Türkçeleştirildi. Panele dokunurken şu kurallara uy:
+
+Panel arayüz dili Türkçe (`i18n.fallbackLanguage: 'tr'`, desteklenenler `tr` + `en`). Yeni alan/koleksiyon eklerken `label`, `admin.description` ve `admin.placeholder` alanlarını Türkçe ve teknik olmayan bir dille doldur — panelin kullanıcısı editördür, geliştirici değil.
+Panel stilleri `src/app/(payload)/custom.scss` içindedir. Payload kendi CSS'ini `@layer payload-default` / `@layer payload` katmanlarına yazar; bu dosya katmansızdır ve bu yüzden `!important` olmadan üstün gelir — katmansız kalmasına dikkat et.
+Renkler `--color-base-*`, `--color-success-*` ve `--color-error-*` rampaları üzerinden ezilir; tek tek bileşen rengi yazmak yerine önce rampayı düşün.
+Panele özel React bileşenleri `src/admin/components/` altındadır (marka işareti, giriş ekranı metni, menü kısayolu, karşılama panosu). Bileşen ekleyip `payload.config.ts` içinde yol ile referans verdikten sonra `payload generate:importmap` çalıştırmayı unutma.
+Eklenti eklediğin koleksiyonları sonradan düzenleyecek bir plugin yazarsan `order` değerini o eklentininkinden büyük ver (Payload eklentileri `order ?? 0`'a göre sıralar; ör. `@payloadcms/plugin-mcp` = 10).
 
 5. Site Haritası (kurulacak sayfalar)
 Ana Sayfa — /
@@ -208,10 +214,10 @@ Her sayfada responsive ve SEO kontrolünü atlama (Bölüm 3).
 Kararsız kaldığın yerde önce kısa bir plan sun, sonra uygula.
 Kod açık, tiplenmiş (TypeScript) ve yeniden kullanılabilir bileşenlere bölünmüş olsun (Header, Footer, ServiceCard, Hero, Section, PostCard, ContactForm, Breadcrumbs, vb.).
 9. Şimdilik YAPILMAYACAKLAR
-Payload admin panelinin görsel özelleştirmesi (sonra yapılacak — varsayılanı bırak).
+Panelde rol/yetki ayrımı (şimdilik giriş yapan herkes tam yetkili).
 Çok dillilik (şimdilik yalnızca Türkçe).
 E-ticaret / sepet / ödeme.
 Gerçek firma bilgileri, gerçek metinler, gerçek görseller (hepsi placeholder; kullanıcı sonradan girecek). Referans sitenin metin/görsel/iletişim bilgilerini birebir kopyalama.
 10. Özet (tek cümle)
 
-Beyaz/soğuk-mavi paletli, tamamen responsive, SEO öncelikli, Payload CMS ile yönetilebilen, Vercel + Neon + Vercel Blob (ücretsiz katmanlar) üzerinde yayınlanacak, klasik kurumsal danışmanlık düzeninde çok sayfalı bir ISO belgelendirme tanıtım sitesi; içerikler temsili (sonra değiştirilecek), admin teması şimdilik varsayılan.
+Beyaz/soğuk-mavi paletli, tamamen responsive, SEO öncelikli, Payload CMS ile yönetilebilen, Vercel + Neon + Vercel Blob (ücretsiz katmanlar) üzerinde yayınlanacak, klasik kurumsal danışmanlık düzeninde çok sayfalı bir ISO belgelendirme tanıtım sitesi; içerikler temsili (sonra değiştirilecek), yönetim paneli aynı paletle markalanmış ve tamamen Türkçedir.

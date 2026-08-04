@@ -1,0 +1,851 @@
+/* ==================================================================
+   Yönetim Paneli Teması — "Güven & Güvenlik" (soğuk mavi / beyaz)
+   CLAUDE.md Bölüm 4'teki palet, Payload admin arayüzüne uygulanır.
+
+   Payload kendi stillerini `@layer payload-default` ve `@layer payload`
+   katmanlarına yazar. Bu dosya katmansızdır; katmansız CSS her zaman
+   katmanlı CSS'i geçersiz kılar, bu yüzden !important gerekmez.
+   ================================================================== */
+
+/* ------------------------------------------------------------------
+   1. Marka değişkenleri
+------------------------------------------------------------------ */
+:root {
+  --dg-primary: #0c3c78;
+  --dg-primary-dark: #082a57;
+  --dg-primary-soft: #e8f1fa;
+  --dg-accent: #1592b5;
+  --dg-accent-dark: #0f7091;
+  --dg-navy: #0a1f3c;
+  --dg-on-brand: #ffffff;
+
+  /* Soğuk gölgeler — sitedeki kartlarla aynı his */
+  --dg-shadow-sm: 0 1px 2px rgb(12 60 120 / 0.06);
+  --dg-shadow-md: 0 1px 2px rgb(12 60 120 / 0.05), 0 6px 20px rgb(12 60 120 / 0.07);
+  --dg-shadow-lg: 0 2px 4px rgb(12 60 120 / 0.06), 0 14px 36px rgb(12 60 120 / 0.13);
+}
+
+/* ------------------------------------------------------------------
+   2. Temel renk rampası
+   Payload'ın tüm yüzey/metin renkleri --color-base-* üzerinden türer.
+   Nötr grileri lacivert-mavi tonlu bir rampayla değiştiriyoruz.
+------------------------------------------------------------------ */
+:root {
+  --color-base-0: #ffffff;
+  --color-base-50: #f4f8fc;
+  --color-base-100: #e8f0f8;
+  --color-base-150: #d8e4f0;
+  --color-base-200: #c6d6e7;
+  --color-base-250: #b2c6db;
+  --color-base-300: #9db5ce;
+  --color-base-350: #88a3c0;
+  --color-base-400: #7391b1;
+  --color-base-450: #6180a0;
+  --color-base-500: #52708e;
+  --color-base-550: #46617c;
+  --color-base-600: #3b536b;
+  --color-base-650: #32495f;
+  --color-base-700: #2a3e52;
+  --color-base-750: #223546;
+  --color-base-800: #1a2b3a;
+  --color-base-850: #142334;
+  --color-base-900: #0e1b2a;
+  --color-base-950: #09131f;
+  --color-base-1000: #050c15;
+
+  /* Payload'ta "success" hem başarı bildirimlerinde hem de odak halkasında
+     kullanılır. Paletin soğuk camgöbeği vurgusuna çekiyoruz. */
+  --color-success-50: #eef7fa;
+  --color-success-100: #daeef5;
+  --color-success-150: #bfe2ee;
+  --color-success-200: #a3d5e6;
+  --color-success-250: #86c8de;
+  --color-success-300: #66b9d4;
+  --color-success-350: #46aac9;
+  --color-success-400: #2a9dc0;
+  --color-success-450: #1b96ba;
+  --color-success-500: #1592b5;
+  --color-success-550: #1284a4;
+  --color-success-600: #0f7091;
+  --color-success-650: #0d627e;
+  --color-success-700: #0c556d;
+  --color-success-750: #0b485c;
+  --color-success-800: #0a3c4d;
+  --color-success-850: #09313f;
+  --color-success-900: #082632;
+  --color-success-950: #071c25;
+
+  /* Hata rengi soğuk paletle çakışmayan, doygunluğu düşürülmüş kırmızı */
+  --color-error-50: #fdf2f2;
+  --color-error-100: #fbe3e3;
+  --color-error-150: #f7cccc;
+  --color-error-200: #f2b4b4;
+  --color-error-250: #ec9b9b;
+  --color-error-300: #e28080;
+  --color-error-350: #d76767;
+  --color-error-400: #c95252;
+  --color-error-450: #b94343;
+  --color-error-500: #a83838;
+  --color-error-550: #963232;
+  --color-error-600: #842d2d;
+  --color-error-650: #732929;
+  --color-error-700: #632525;
+  --color-error-750: #532121;
+  --color-error-800: #451d1d;
+  --color-error-850: #381919;
+  --color-error-900: #2c1616;
+  --color-error-950: #211313;
+}
+
+/* Köşe yuvarlaklıkları — varsayılan 3/4/8px yerine daha modern ölçüler */
+:root {
+  --style-radius-s: 6px;
+  --style-radius-m: 8px;
+  --style-radius-l: 14px;
+
+  --font-body:
+    var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text', 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --accessibility-outline: 2px solid var(--dg-accent);
+  --accessibility-outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------
+   3. Açık / koyu tema yüzeyleri
+------------------------------------------------------------------ */
+html[data-theme='light'] {
+  --theme-bg: #f4f8fc; /* uygulama zemini hafif soğuk gri-mavi */
+  --theme-input-bg: #ffffff;
+  --theme-border-color: #d5e2f0;
+}
+
+html[data-theme='dark'] {
+  --theme-bg: #0a1626;
+  --theme-input-bg: #142334;
+  --theme-border-color: #223546;
+
+  --dg-primary: #4d8ed6;
+  --dg-primary-dark: #6ba4e3;
+  --dg-primary-soft: #16304f;
+  --dg-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --dg-shadow-md: 0 6px 20px rgb(0 0 0 / 0.35);
+  --dg-shadow-lg: 0 14px 36px rgb(0 0 0 / 0.45);
+}
+
+/* ------------------------------------------------------------------
+   4. Sol menü (nav)
+------------------------------------------------------------------ */
+.nav {
+  background: var(--dg-navy);
+  color: #dbe7f5;
+  border-right: 0;
+}
+
+html[data-theme='dark'] .nav {
+  background: #060f1c;
+}
+
+.nav__scroll {
+  scrollbar-width: thin;
+}
+
+/* Menü başlığı: logo alanı */
+.nav__header {
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+/* Grup başlıkları ("İçerik", "Ayarlar" ...) */
+.nav .nav-group__toggle {
+  color: #7fa6d0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.nav .nav-group__toggle:hover {
+  color: #ffffff;
+}
+
+.nav .nav-group__indicator svg .stroke {
+  stroke: currentColor;
+}
+
+/* Menü bağlantıları */
+.nav .nav__link {
+  color: #cfe0f2;
+  border-radius: var(--style-radius-m);
+  padding-block: 0.55rem;
+  padding-inline: 0.7rem;
+  margin-inline: -0.2rem;
+  font-weight: 500;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.nav .nav__link:hover,
+.nav .nav__link:focus-visible {
+  background: rgb(255 255 255 / 0.09);
+  color: #ffffff;
+  opacity: 1;
+}
+
+.nav .nav__link.active,
+.nav .nav__link[aria-current='page'] {
+  background: var(--dg-accent);
+  color: #ffffff;
+}
+
+.nav .nav__link-indicator {
+  background: var(--dg-accent);
+}
+
+.nav__controls,
+.nav__log-out {
+  color: #9fbfe0;
+}
+
+.nav__log-out:hover {
+  color: #ffffff;
+}
+
+/* ------------------------------------------------------------------
+   5. Üst çubuk
+------------------------------------------------------------------ */
+.app-header__bg {
+  background: var(--theme-bg);
+  border-bottom: 1px solid var(--theme-border-color);
+}
+
+.step-nav a {
+  color: var(--dg-primary);
+  text-decoration: none;
+}
+
+.step-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------
+   6. Butonlar
+------------------------------------------------------------------ */
+.btn--style-primary {
+  --bg-color: var(--dg-primary);
+  --color: var(--dg-on-brand);
+  --hover-bg: var(--dg-primary-dark);
+  --hover-color: var(--dg-on-brand);
+  font-weight: 600;
+  border-radius: var(--style-radius-m);
+  box-shadow: var(--dg-shadow-sm);
+}
+
+html[data-theme='dark'] .btn--style-primary {
+  --color: #06121f;
+  --hover-color: #06121f;
+}
+
+.btn--style-secondary {
+  --color: var(--dg-primary);
+  --btn-border: 1px solid var(--dg-primary);
+  --hover-color: var(--dg-primary-dark);
+  --hover-btn-border: 1px solid var(--dg-primary-dark);
+  font-weight: 600;
+  border-radius: var(--style-radius-m);
+}
+
+.btn--style-pill {
+  border-radius: 999px;
+}
+
+/* Kaydet butonu her zaman görünür ve net dursun */
+.form-submit .btn--style-primary {
+  min-height: 2.6rem;
+  padding-inline: 1.4rem;
+}
+
+/* ------------------------------------------------------------------
+   7. Kartlar, tablolar, alan kutuları
+------------------------------------------------------------------ */
+.card {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--style-radius-l);
+  box-shadow: var(--dg-shadow-sm);
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.card--has-onclick:hover {
+  border-color: color-mix(in srgb, var(--dg-accent) 45%, var(--theme-border-color));
+  box-shadow: var(--dg-shadow-md);
+  transform: translateY(-2px);
+}
+
+.card__title {
+  color: var(--dg-primary);
+  font-weight: 650;
+}
+
+html[data-theme='dark'] .card__title {
+  color: #cfe2f7;
+}
+
+.table {
+  border-radius: var(--style-radius-l);
+  overflow: hidden;
+  border: 1px solid var(--theme-border-color);
+}
+
+.table thead th {
+  background: var(--theme-elevation-50);
+  color: var(--theme-elevation-600);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--dg-accent) 6%, transparent);
+}
+
+/* ------------------------------------------------------------------
+   8. Form alanları — son kullanıcı için okunaklılık
+------------------------------------------------------------------ */
+.field-label {
+  color: var(--theme-elevation-800);
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+/* Alan altındaki yardım metinleri varsayılanda çok soluk kalıyor */
+.field-description {
+  color: var(--theme-elevation-550);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.field-type input,
+.field-type textarea,
+.field-type .rs__control {
+  border-radius: var(--style-radius-s);
+}
+
+.field-type input:focus,
+.field-type textarea:focus,
+.field-type .rs__control--is-focused {
+  border-color: var(--dg-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--dg-accent) 22%, transparent);
+}
+
+/* Zorunlu alan yıldızı belirgin olsun */
+.field-label .required {
+  color: var(--color-error-500);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------------
+   9. Sekmeler (İçerik / Görseller / SEO)
+------------------------------------------------------------------ */
+.tabs-field__tabs {
+  border-bottom: 1px solid var(--theme-border-color);
+  gap: 0.25rem;
+}
+
+.tabs-field__tab-button {
+  border-radius: var(--style-radius-m) var(--style-radius-m) 0 0;
+  font-weight: 600;
+  color: var(--theme-elevation-500);
+  padding-inline: 1rem;
+}
+
+.tabs-field__tab-button:hover {
+  color: var(--dg-primary);
+  background: color-mix(in srgb, var(--dg-accent) 8%, transparent);
+}
+
+.tabs-field__tab-button--active {
+  color: var(--dg-primary);
+  box-shadow: inset 0 -3px 0 0 var(--dg-accent);
+}
+
+html[data-theme='dark'] .tabs-field__tab-button--active {
+  color: #cfe2f7;
+}
+
+/* Belge sekmeleri (Düzenle / API vb.) */
+.doc-tab--active .doc-tab__label {
+  color: var(--dg-primary);
+}
+
+/* ------------------------------------------------------------------
+   10. Giriş ekranı
+------------------------------------------------------------------ */
+.template-minimal {
+  background:
+    radial-gradient(1100px 520px at 50% -12%, rgb(21 146 181 / 0.16), transparent 65%),
+    linear-gradient(180deg, #f4f8fc 0%, #e8f1fa 100%);
+}
+
+html[data-theme='dark'] .template-minimal {
+  background:
+    radial-gradient(1100px 520px at 50% -12%, rgb(21 146 181 / 0.2), transparent 65%),
+    linear-gradient(180deg, #0a1626 0%, #060f1c 100%);
+}
+
+.template-minimal__wrap {
+  background: var(--theme-elevation-0);
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--style-radius-l);
+  box-shadow: var(--dg-shadow-lg);
+  padding: 2rem 1.75rem;
+  max-width: 27rem;
+}
+
+.login__brand {
+  margin-bottom: 0.5rem;
+}
+
+/* ------------------------------------------------------------------
+   11. Özel bileşenler (karşılama panosu, menü kısayolları, giriş metni)
+------------------------------------------------------------------ */
+
+/* --- Sol menüdeki "Siteyi Görüntüle" kısayolu --- */
+.dg-nav-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.dg-nav-shortcuts__link {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.4rem;
+  padding: 0.5rem 0.7rem;
+  margin-inline: -0.2rem;
+  border-radius: var(--style-radius-m);
+  background: rgb(255 255 255 / 0.07);
+  color: #eaf2fb;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.dg-nav-shortcuts__link:hover {
+  background: var(--dg-accent);
+  color: #ffffff;
+  opacity: 1;
+}
+
+.dg-nav-shortcuts__link svg {
+  flex-shrink: 0;
+}
+
+/* --- Giriş ekranı tanıtım metni --- */
+.dg-login-intro {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.dg-login-intro__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dg-primary);
+  margin-bottom: 0.35rem;
+}
+
+html[data-theme='dark'] .dg-login-intro__title {
+  color: #cfe2f7;
+}
+
+.dg-login-intro__text {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--theme-elevation-500);
+}
+
+/* --- Karşılama panosu --- */
+.dg-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dg-dash__hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--style-radius-l);
+  padding: 1.75rem 1.5rem;
+  background: linear-gradient(120deg, var(--dg-navy) 0%, #0c3c78 55%, #10557f 100%);
+  color: #ffffff;
+  box-shadow: var(--dg-shadow-md);
+}
+
+.dg-dash__hero::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -45%;
+  inset-inline-end: -8%;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(21 146 181 / 0.5) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.dg-dash__hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 46rem;
+}
+
+.dg-dash__eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #8fd4e8;
+  margin-bottom: 0.5rem;
+}
+
+.dg-dash__title {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 0.55rem;
+  color: #ffffff;
+}
+
+.dg-dash__lead {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.85);
+  margin: 0;
+}
+
+.dg-dash__hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.dg-dash__hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--style-radius-m);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.dg-dash__hero-btn--solid {
+  background: #ffffff;
+  color: var(--dg-navy);
+}
+
+.dg-dash__hero-btn--solid:hover {
+  background: #e8f1fa;
+  opacity: 1;
+}
+
+.dg-dash__hero-btn--ghost {
+  border: 1px solid rgb(255 255 255 / 0.45);
+  color: #ffffff;
+}
+
+.dg-dash__hero-btn--ghost:hover {
+  background: rgb(255 255 255 / 0.14);
+  opacity: 1;
+}
+
+/* Bölüm başlıkları */
+.dg-dash__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.dg-dash__section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--theme-elevation-800);
+  margin: 0;
+}
+
+.dg-dash__section-hint {
+  font-size: 0.85rem;
+  color: var(--theme-elevation-500);
+  margin: 0;
+}
+
+/* Hızlı işlem kartları */
+.dg-dash__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .dg-dash__actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .dg-dash__actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.dg-dash__action {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--style-radius-l);
+  background: var(--theme-elevation-0);
+  box-shadow: var(--dg-shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.dg-dash__action:hover {
+  border-color: color-mix(in srgb, var(--dg-accent) 50%, var(--theme-border-color));
+  box-shadow: var(--dg-shadow-md);
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+.dg-dash__action-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: var(--style-radius-m);
+  background: var(--dg-primary-soft);
+  color: var(--dg-primary);
+}
+
+html[data-theme='dark'] .dg-dash__action-icon {
+  color: #8fc3f0;
+}
+
+.dg-dash__action-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--theme-elevation-800);
+  margin-bottom: 0.15rem;
+}
+
+.dg-dash__action-hint {
+  display: block;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--theme-elevation-500);
+}
+
+/* İçerik özeti + son mesajlar iki sütun */
+.dg-dash__split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .dg-dash__split {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
+/* Sayısal özet */
+.dg-dash__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .dg-dash__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.dg-dash__stat {
+  display: block;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--style-radius-l);
+  background: var(--theme-elevation-0);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.dg-dash__stat:hover {
+  border-color: color-mix(in srgb, var(--dg-accent) 50%, var(--theme-border-color));
+  box-shadow: var(--dg-shadow-sm);
+  opacity: 1;
+}
+
+.dg-dash__stat-value {
+  display: block;
+  font-size: 1.65rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--dg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-theme='dark'] .dg-dash__stat-value {
+  color: #8fc3f0;
+}
+
+.dg-dash__stat-label {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--theme-elevation-500);
+}
+
+/* Son mesajlar listesi */
+.dg-dash__panel {
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--style-radius-l);
+  background: var(--theme-elevation-0);
+  overflow: hidden;
+}
+
+.dg-dash__msg {
+  display: block;
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--theme-border-color);
+  transition: background-color 140ms ease;
+}
+
+.dg-dash__msg:last-child {
+  border-bottom: 0;
+}
+
+.dg-dash__msg:hover {
+  background: color-mix(in srgb, var(--dg-accent) 7%, transparent);
+  opacity: 1;
+}
+
+.dg-dash__msg-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dg-dash__msg-name {
+  font-size: 0.93rem;
+  font-weight: 650;
+  color: var(--theme-elevation-800);
+}
+
+.dg-dash__msg-date {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--theme-elevation-450);
+  font-variant-numeric: tabular-nums;
+}
+
+.dg-dash__msg-subject {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--theme-elevation-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dg-dash__empty {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--theme-elevation-450);
+}
+
+/* Yardım / ipucu şeridi */
+.dg-dash__tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--dg-accent) 30%, var(--theme-border-color));
+  border-radius: var(--style-radius-l);
+  background: color-mix(in srgb, var(--dg-accent) 7%, var(--theme-elevation-0));
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--theme-elevation-700);
+}
+
+.dg-dash__tip svg {
+  flex-shrink: 0;
+  color: var(--dg-accent);
+  margin-top: 0.1rem;
+}
+
+/* Panonun altındaki hazır koleksiyon kartları */
+.modular-dashboard {
+  margin-top: 0.5rem;
+}
+
+/* ------------------------------------------------------------------
+   12. Küçük ekran düzeltmeleri
+------------------------------------------------------------------ */
+@media (max-width: 768px) {
+  .dg-dash__hero {
+    padding: 1.35rem 1.15rem;
+  }
+
+  .dg-dash__title {
+    font-size: 1.3rem;
+  }
+}
+
+/* Hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  .dg-dash__action:hover,
+  .card--has-onclick:hover {
+    transform: none;
+  }
+}

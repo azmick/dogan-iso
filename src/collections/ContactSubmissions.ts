@@ -11,14 +11,17 @@ import { authenticated } from '../access'
 export const ContactSubmissions: CollectionConfig = {
   slug: 'contact-submissions',
   labels: {
-    singular: 'İletişim Formu Kaydı',
-    plural: 'İletişim Formu Kayıtları',
+    singular: 'Gelen Mesaj',
+    plural: 'Gelen Mesajlar',
   },
   admin: {
     group: 'Yönetim',
-    useAsTitle: 'name',
+    useAsTitle: 'subject',
     defaultColumns: ['name', 'email', 'subject', 'createdAt'],
-    description: 'Siteden gönderilen iletişim formu mesajları.',
+    listSearchableFields: ['name', 'email', 'subject', 'message'],
+    description:
+      'Sitedeki iletişim formundan gönderilen mesajlar. Bu kayıtlar salt okunurdur; değiştirilemez, yalnızca okunup silinebilir.',
+    pagination: { defaultLimit: 25 },
   },
   access: {
     read: authenticated,
@@ -32,35 +35,48 @@ export const ContactSubmissions: CollectionConfig = {
       type: 'text',
       label: 'Ad Soyad',
       required: true,
+      admin: { readOnly: true },
     },
     {
       name: 'email',
       type: 'email',
       label: 'E-posta',
       required: true,
+      admin: {
+        readOnly: true,
+        description: 'Yanıt vermek için bu adrese yazabilirsiniz.',
+      },
     },
     {
       name: 'phone',
       type: 'text',
       label: 'Telefon',
+      admin: { readOnly: true },
     },
     {
       name: 'subject',
       type: 'text',
       label: 'Konu',
       required: true,
+      admin: { readOnly: true },
     },
     {
       name: 'message',
       type: 'textarea',
       label: 'Mesaj',
       required: true,
+      admin: { readOnly: true },
     },
     {
       name: 'kvkkConsent',
       type: 'checkbox',
       label: 'KVKK Aydınlatma Metni onayı verildi',
       defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Gönderen kişi formu doldururken KVKK metnini onayladı mı?',
+      },
     },
   ],
   timestamps: true,

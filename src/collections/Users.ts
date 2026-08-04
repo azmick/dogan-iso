@@ -10,8 +10,11 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: 'Yönetim',
-    useAsTitle: 'email',
-    defaultColumns: ['name', 'email'],
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'email', 'updatedAt'],
+    listSearchableFields: ['name', 'email'],
+    description:
+      'Bu panele giriş yapabilen kişiler. Yeni bir çalışana erişim vermek için "Yeni Kullanıcı" deyip e-posta ve şifre belirleyin.',
   },
   auth: true,
   access: {
@@ -26,6 +29,10 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
       label: 'Ad Soyad',
+      admin: {
+        placeholder: 'Örn: Ayşe Yılmaz',
+        description: 'Panelde ve kayıt listelerinde görünen isim.',
+      },
     },
   ],
 }

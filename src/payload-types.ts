@@ -157,19 +157,28 @@ export interface PayloadMcpApiKeyAuthOperations {
   };
 }
 /**
- * Hizmet detay sayfaları (/hizmetler/...) buradan yönetilir.
+ * Sitedeki hizmet sayfaları. Ana sayfadaki "Hizmetlerimiz" kartları ve üst menüdeki hizmet listesi buradan otomatik oluşur.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
   id: number;
+  /**
+   * Sayfanın en üstünde büyük başlık olarak ve hizmet kartlarında görünür.
+   */
   title: string;
   /**
-   * Kartlarda ve arama sonuçlarında görünen 1-2 cümlelik özet.
+   * Ana sayfadaki hizmet kartında ve Google sonuçlarında görünen özet. En fazla 240 karakter.
    */
   excerpt?: string | null;
+  /**
+   * Hizmet kartında ve sayfanın üst bölümünde kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).
+   */
   coverImage?: (number | null) | Media;
+  /**
+   * Hizmetin detaylı anlatımı. Ara başlık, madde listesi ve bağlantı ekleyebilirsiniz.
+   */
   content?: {
     root: {
       type: string;
@@ -190,7 +199,7 @@ export interface Service {
    */
   slug: string;
   /**
-   * Küçük sayı önce gösterilir.
+   * Hizmetlerin listelenme sırası. Küçük sayı önce gösterilir (1 en üstte). Emin değilseniz 100 bırakın.
    */
   order?: number | null;
   meta?: {
@@ -205,7 +214,7 @@ export interface Service {
   createdAt: string;
 }
 /**
- * Sitede kullanılan tüm görseller ve dosyalar.
+ * Sitede kullanılan tüm fotoğraf ve belgeler. Bir görseli buraya bir kez yükleyip birden fazla sayfada kullanabilirsiniz.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -213,9 +222,12 @@ export interface Service {
 export interface Media {
   id: number;
   /**
-   * Görselin içeriğini kısaca anlatır. SEO ve erişilebilirlik için zorunludur.
+   * Görselde ne olduğunu kısaca yazın. Görme engelli ziyaretçilere okunur ve Google için önemlidir — bu yüzden zorunludur.
    */
   alt: string;
+  /**
+   * Galeride görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.
+   */
   caption?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -264,16 +276,28 @@ export interface Media {
   };
 }
 /**
- * Haber / blog yazıları (/haberler/...).
+ * Haber, duyuru ve blog yazıları. Sitedeki "Haberler" sayfasında en yeniden eskiye doğru listelenir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
   id: number;
+  /**
+   * Haberin ana başlığı. Kısa ve açıklayıcı olması okunma oranını artırır.
+   */
   title: string;
+  /**
+   * Haber kartlarında ve Google sonuçlarında görünen kısa metin. En fazla 300 karakter.
+   */
   excerpt?: string | null;
+  /**
+   * Haber kartında ve sosyal medya paylaşımlarında kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).
+   */
   coverImage?: (number | null) | Media;
+  /**
+   * Haberin tam metni. Ara başlık, liste, bağlantı ve görsel ekleyebilirsiniz.
+   */
   content?: {
     root: {
       type: string;
@@ -293,6 +317,9 @@ export interface Post {
    * URL adresinde görünen kısa ad. Boş bırakılırsa başlıktan otomatik üretilir.
    */
   slug: string;
+  /**
+   * Haberin sitede görünen tarihi. Listeleme sırası bu tarihe göre yapılır.
+   */
   publishedDate: string;
   meta?: {
     title?: string | null;
@@ -306,20 +333,28 @@ export interface Post {
   createdAt: string;
 }
 /**
- * Etkinlik ve proje sayfaları (/etkinlikler/...).
+ * Fuar, eğitim, seminer ve proje kayıtları. Buraya eklediğiniz fotoğraflar /galeri sayfasında da görünür.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
   id: number;
+  /**
+   * Etkinliğin adı. Kartlarda ve sayfa başlığında görünür.
+   */
   title: string;
+  /**
+   * Etkinlik kartlarında görünen özet. En fazla 300 karakter.
+   */
   excerpt?: string | null;
+  /**
+   * Etkinlik kartında kullanılan ana görsel. Önerilen ölçü: 1600 x 900 piksel (yatay).
+   */
   coverImage?: (number | null) | Media;
   /**
-   * Bu etkinliğe ait fotoğraflar. /galeri sayfasında da listelenir.
+   * Etkinliğin detaylı anlatımı, katılımcılar, program vb.
    */
-  gallery?: (number | Media)[] | null;
   content?: {
     root: {
       type: string;
@@ -336,10 +371,9 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   /**
-   * URL adresinde görünen kısa ad. Boş bırakılırsa başlıktan otomatik üretilir.
+   * Birden fazla fotoğraf seçebilirsiniz. Sürükleyerek sıralarını değiştirebilirsiniz.
    */
-  slug: string;
-  date: string;
+  gallery?: (number | Media)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -348,22 +382,36 @@ export interface Project {
      */
     image?: (number | null) | Media;
   };
+  /**
+   * URL adresinde görünen kısa ad. Boş bırakılırsa başlıktan otomatik üretilir.
+   */
+  slug: string;
+  /**
+   * Etkinliğin gerçekleştiği tarih. Listeleme sırası bu tarihe göre yapılır.
+   */
+  date: string;
   updatedAt: string;
   createdAt: string;
 }
 /**
- * Kurumsal / yasal içerik sayfaları (KVKK Aydınlatma Metni, Çerez Politikası vb.). Adres: /sayfa-url-adi
+ * Kurumsal ve yasal metin sayfaları: KVKK Aydınlatma Metni, Çerez Politikası, Başvuru Formu vb. Adresleri "site.com/sayfa-adi" biçimindedir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
   id: number;
+  /**
+   * Sayfanın en üstünde görünen başlık ve menüdeki adı.
+   */
   title: string;
   /**
-   * Arama motorlarına verilecek varsayılan açıklama.
+   * Google arama sonuçlarında başlığın altında görünen açıklama. Boş bırakılırsa site geneli açıklama kullanılır.
    */
   excerpt?: string | null;
+  /**
+   * Sayfanın tam metni. Word veya benzeri bir programdan yapıştırdığınız metinler biçimlendirmesiyle birlikte gelir.
+   */
   content?: {
     root: {
       type: string;
@@ -384,9 +432,12 @@ export interface Page {
    */
   slug: string;
   /**
-   * Üst menüdeki "Kurumsal" açılır listesinde görünsün mü?
+   * İşaretliyse sayfa, üst menüdeki "Kurumsal" açılır listesinde görünür. Yalnızca adresi bilenlerin görmesini istiyorsanız işareti kaldırın.
    */
   showInCorporateMenu?: boolean | null;
+  /**
+   * Küçük sayı menüde daha üstte görünür.
+   */
   menuOrder?: number | null;
   meta?: {
     title?: string | null;
@@ -400,14 +451,20 @@ export interface Page {
   createdAt: string;
 }
 /**
- * /sss sayfasındaki soru-cevap listesi.
+ * Sitedeki /sss sayfasında açılır-kapanır liste olarak gösterilen soru-cevaplar. Her kayıt bir soru demektir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq".
  */
 export interface Faq {
   id: number;
+  /**
+   * Ziyaretçinin tıklayacağı soru başlığı.
+   */
   question: string;
+  /**
+   * Soruya verilen cevap. Kısa ve net tutmanız önerilir.
+   */
   answer: {
     root: {
       type: string;
@@ -423,12 +480,15 @@ export interface Faq {
     };
     [k: string]: unknown;
   };
+  /**
+   * Soruların listelenme sırası. Küçük sayı önce gösterilir.
+   */
   order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
- * Siteden gönderilen iletişim formu mesajları.
+ * Sitedeki iletişim formundan gönderilen mesajlar. Bu kayıtlar salt okunurdur; değiştirilemez, yalnızca okunup silinebilir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions".
@@ -436,20 +496,31 @@ export interface Faq {
 export interface ContactSubmission {
   id: number;
   name: string;
+  /**
+   * Yanıt vermek için bu adrese yazabilirsiniz.
+   */
   email: string;
   phone?: string | null;
   subject: string;
   message: string;
+  /**
+   * Gönderen kişi formu doldururken KVKK metnini onayladı mı?
+   */
   kvkkConsent?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Bu panele giriş yapabilen kişiler. Yeni bir çalışana erişim vermek için "Yeni Kullanıcı" deyip e-posta ve şifre belirleyin.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
+  /**
+   * Panelde ve kayıt listelerinde görünen isim.
+   */
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -471,7 +542,7 @@ export interface User {
   collection: 'users';
 }
 /**
- * API keys control which collections, resources, tools, and prompts MCP clients can access
+ * Teknik ayar — yapay zekâ araçlarının siteyi güncellemesi için üretilen erişim anahtarları. İçerik düzenlemek için bu bölüme girmenize gerek yoktur.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-mcp-api-keys".
@@ -785,10 +856,8 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   coverImage?: T;
-  gallery?: T;
   content?: T;
-  slug?: T;
-  date?: T;
+  gallery?: T;
   meta?:
     | T
     | {
@@ -796,6 +865,8 @@ export interface ProjectsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
+  date?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1049,59 +1120,95 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Site adı, logo ve varsayılan SEO bilgileri.
+ * Firma adı, logo ve Google/sosyal medya paylaşımlarında kullanılan varsayılan bilgiler. Buradaki değişiklikler sitenin tamamını etkiler.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Üst menüde, tarayıcı sekmesinde ve footer telif satırında görünür.
+   */
   siteName: string;
+  /**
+   * Logonun altında görünen kısa tanıtım cümlesi.
+   */
   tagline?: string | null;
   /**
-   * Header için. Yüklenmezse yazı logo gösterilir.
+   * Ticaret sicilindeki tam unvan. Arama motorlarına firma bilgisi olarak bildirilir; sayfalarda görünmez.
+   */
+  legalName?: string | null;
+  /**
+   * Üst menüde (beyaz zemin) kullanılır. Şeffaf arka planlı PNG veya SVG önerilir. Önerilen yükseklik: 56 piksel.
    */
   logo?: (number | null) | Media;
   /**
-   * Footer için ters/beyaz versiyon.
+   * Footer lacivert zemin üzerinde kullanılır. Logonun beyaz / ters renkli versiyonunu yükleyin.
    */
   logoInverted?: (number | null) | Media;
+  /**
+   * Tarayıcı sekmesinde görünen küçük kare simge. Önerilen ölçü: 512 x 512 piksel.
+   */
   favicon?: (number | null) | Media;
   defaultSeo?: {
+    /**
+     * Google sonuçlarında mavi bağlantı olarak görünen metin. 55-60 karakteri geçmemesi önerilir.
+     */
     title?: string | null;
+    /**
+     * Google sonuçlarında başlığın altındaki gri açıklama. 150-160 karakter idealdir.
+     */
     description?: string | null;
     /**
-     * Önerilen ölçü: 1200 x 630 piksel.
+     * Site bağlantısı WhatsApp, LinkedIn veya Facebook’ta paylaşıldığında görünen görsel. Önerilen ölçü: 1200 x 630 piksel.
      */
     ogImage?: (number | null) | Media;
   };
-  legalName?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Header, footer ve iletişim sayfası bu bilgilerden beslenir. Şu an temsili (placeholder) değerler girilidir.
+ * Üst bar, footer ve İletişim sayfası tek bir yerden — buradan — beslenir. Bir bilgiyi burada değiştirdiğinizde sitenin her yerinde güncellenir. Şu an temsili (örnek) değerler girilidir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-info".
  */
 export interface ContactInfo {
   id: number;
+  /**
+   * Footer ve İletişim sayfasında olduğu gibi gösterilir.
+   */
   addressLine?: string | null;
+  /**
+   * Google’a "bu firma nerede" bilgisini vermek için ayrıca istenir. Sayfada tek başına görünmez.
+   */
   addressLocality?: string | null;
   postalCode?: string | null;
+  /**
+   * Ziyaretçiye gösterilen numara. Mobilde tıklanınca arama başlatır.
+   */
   phone?: string | null;
   /**
-   * Uluslararası formatta, boşluksuz. Örn: +905551112233
+   * Uluslararası formatta, boşluk ve parantez olmadan yazın. Örn: +905551112233
    */
   whatsapp?: string | null;
+  /**
+   * İletişim formundan gelen mesajların bildirileceği adres de budur.
+   */
   email?: string | null;
   workingHours?: string | null;
   /**
-   * Google Haritalar > Paylaş > Haritayı yerleştir bölümündeki iframe içindeki src adresi. Şu an temsili bir konum girilidir.
+   * Google Haritalar’da konumunuzu açın → Paylaş → "Haritayı yerleştir" → çıkan kodun içindeki src="..." adresini buraya yapıştırın. Şu an temsili bir konum girilidir.
    */
   mapEmbedUrl?: string | null;
+  /**
+   * Google Haritalar’da konuma sağ tıklayınca çıkan iki sayıdan ilki. Arama motorlarına konum bildirmek için kullanılır.
+   */
   latitude?: number | null;
+  /**
+   * Sağ tıklayınca çıkan iki sayıdan ikincisi.
+   */
   longitude?: number | null;
   social?: {
     facebook?: string | null;
@@ -1110,6 +1217,9 @@ export interface ContactInfo {
     instagram?: string | null;
     youtube?: string | null;
   };
+  /**
+   * "Yeni Link Ekle" ile satır ekleyin, soldaki tutamaçtan sürükleyerek sıralayın.
+   */
   usefulLinks?:
     | {
         label: string;
@@ -1127,6 +1237,7 @@ export interface ContactInfo {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   tagline?: T;
+  legalName?: T;
   logo?: T;
   logoInverted?: T;
   favicon?: T;
@@ -1137,7 +1248,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
-  legalName?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

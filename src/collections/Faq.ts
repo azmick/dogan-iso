@@ -11,8 +11,11 @@ export const Faq: CollectionConfig = {
   admin: {
     group: 'İçerik',
     useAsTitle: 'question',
-    defaultColumns: ['question', 'order'],
-    description: '/sss sayfasındaki soru-cevap listesi.',
+    defaultColumns: ['question', 'order', 'updatedAt'],
+    listSearchableFields: ['question'],
+    description:
+      'Sitedeki /sss sayfasında açılır-kapanır liste olarak gösterilen soru-cevaplar. Her kayıt bir soru demektir.',
+    pagination: { defaultLimit: 50 },
   },
   access: {
     read: anyone,
@@ -27,19 +30,29 @@ export const Faq: CollectionConfig = {
       type: 'text',
       label: 'Soru',
       required: true,
+      admin: {
+        placeholder: 'Örn: ISO 9001 belgesi kaç yıl geçerlidir?',
+        description: 'Ziyaretçinin tıklayacağı soru başlığı.',
+      },
     },
     {
       name: 'answer',
       type: 'richText',
       label: 'Cevap',
       required: true,
+      admin: {
+        description: 'Soruya verilen cevap. Kısa ve net tutmanız önerilir.',
+      },
     },
     {
       name: 'order',
       type: 'number',
-      label: 'Sıra',
+      label: 'Sıra Numarası',
       defaultValue: 100,
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        description: 'Soruların listelenme sırası. Küçük sayı önce gösterilir.',
+      },
     },
   ],
 }
