@@ -25,7 +25,43 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+/**
+ * Vercel'in otomatik verdiği adresler.
+ * - VERCEL_PROJECT_PRODUCTION_URL: projenin canlı alan adı (ör. ornek-firma.com.tr)
+ * - VERCEL_URL: o dağıtıma özel adres (ör. dogan-iso-abc123.vercel.app)
+ */
+const vercelProductionURL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : undefined
+
+const vercelDeploymentURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined
+
+const serverURL =
+  process.env.NEXT_PUBLIC_SERVER_URL || vercelProductionURL || 'http://localhost:3000'
+
+/**
+ * CSRF allowlist — panelin çıkış/kaydetme gibi POST isteklerinde tarayıcının
+ * gönderdiği `Origin` başlığı bu listede yoksa Payload oturum çerezini yok sayar;
+ * istek "giriş yapılmamış" sayılır. Panel bunu kullanıcıya hata olarak göstermez
+ * (ör. çıkışta yine "başarılı" der ama çerez silinmez), o yüzden listenin
+ * eksiksiz olması önemli.
+ *
+ * serverURL'i Payload kendisi ekler; biz Vercel'in verdiği adresleri ve
+ * PAYLOAD_CSRF_ORIGINS ile bildirilen ek adresleri (www'lu/www'suz alan adı,
+ * özel alan adları) ekliyoruz.
+ */
+const csrf = Array.from(
+  new Set(
+    [
+      serverURL,
+      vercelProductionURL,
+      vercelDeploymentURL,
+      ...(process.env.PAYLOAD_CSRF_ORIGINS || '').split(','),
+    ]
+      .map((origin) => origin?.trim().replace(/\/$/, ''))
+      .filter((origin): origin is string => Boolean(origin)),
+  ),
+)
 
 const plugins: Plugin[] = [
   seoPlugin({
@@ -173,6 +209,7 @@ if (process.env.BLOB_READ_WRITE_TOKEN) {
 
 export default buildConfig({
   serverURL,
+  csrf,
   admin: {
     user: Users.slug,
     importMap: {
