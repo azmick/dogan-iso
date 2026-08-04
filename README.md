@@ -80,6 +80,7 @@ admin@ornek-firma.com.tr / Degistir!2026
 | `pnpm lint` | ESLint |
 | `pnpm generate:types` | `src/payload-types.ts` dosyasını yeniden üretir |
 | `pnpm seed` | Temsili içerikleri yükler |
+| `pnpm mcp:key` | MCP istemcileri için API anahtarı üretir/yeniler |
 | `pnpm migrate:create` | Şema değişikliği için migration üretir |
 | `pnpm migrate` | Bekleyen migration'ları uygular |
 | `pnpm ci` | `migrate` + `build` (Vercel build komutu) |
@@ -97,6 +98,7 @@ src/
 ├── fields/            Türkçe-uyumlu slug alanı
 ├── globals/           site-settings, contact-info
 ├── lib/               Payload veri erişimi, SEO, medya ve biçimlendirme yardımcıları
+├── scripts/           Tek seferlik bakım betikleri (MCP API anahtarı üretimi)
 └── seed/              Temsili içerik ve yükleyici
 ```
 
@@ -111,6 +113,33 @@ Panelde tüm içerik türleri Türkçe etiketlerle listelenir:
 
 Header'daki *Kurumsal* menüsü `Sayfalar` koleksiyonundaki "Kurumsal menüsünde göster" işaretli
 kayıtlardan, *Hizmetlerimiz* menüsü ise `Hizmetler` koleksiyonundan otomatik oluşur.
+
+## MCP sunucusu (kodlama ajanları için)
+
+`@payloadcms/plugin-mcp` sayesinde içerik, bir MCP istemcisinden (Claude Code vb.) doğrudan
+yönetilebilir. Uç nokta: `POST /api/mcp` — yalnızca API anahtarıyla erişilir.
+
+```bash
+pnpm mcp:key   # anahtar üretir; ekrana bir kez yazılır
+pnpm dev       # MCP sunucusu geliştirme sunucusuyla birlikte çalışır
+```
+
+Üretilen anahtarı `.claude/settings.local.json` içindeki `PAYLOAD_MCP_API_KEY` alanına yazın
+(bu dosya `.gitignore`'dadır). Sunucu tanımları repodaki [.mcp.json](.mcp.json) dosyasındadır.
+
+Anahtar başına yetkiler panelden **MCP > API Keys** altında tek tek açılıp kapatılabilir.
+Hangi koleksiyon/global'in hangi işlemlere açılabileceği ise `payload.config.ts` içindeki
+`mcpPlugin` yapılandırmasıyla sınırlıdır:
+
+| Kapsam | İşlemler |
+| --- | --- |
+| Hizmetler, Haberler, Etkinlikler, Sayfalar, SSS | listele, oluştur, güncelle, sil |
+| Medya | listele, güncelle (yükleme yalnızca panelden) |
+| İletişim Formu Kayıtları | listele (salt okunur) |
+| Site Ayarları, İletişim Bilgileri | listele, güncelle |
+
+`Kullanıcılar` koleksiyonu bilinçli olarak MCP'ye açılmamıştır. Canlıda ucu tamamen kapatmak
+için `PAYLOAD_MCP_DISABLED=true` tanımlayın.
 
 ## Vercel'e deploy
 

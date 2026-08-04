@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { mcpPlugin } from '@payloadcms/plugin-mcp'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -42,6 +43,77 @@ const plugins: Plugin[] = [
       const prefix = prefixes[collectionSlug as string] ?? ''
 
       return `${serverURL}${prefix}/${doc?.slug ?? ''}`
+    },
+  }),
+
+  /**
+   * MCP sunucusu — POST /api/mcp
+   *
+   * Erişim yalnızca `payload-mcp-api-keys` koleksiyonundaki bir API anahtarıyla
+   * mümkündür (Authorization: Bearer <anahtar>). Her anahtarda aşağıda açılan
+   * yetenekler tek tek işaretlenir; varsayılanları kapalıdır.
+   *
+   * Anahtar üretmek için: pnpm mcp:key
+   * Canlıda tamamen kapatmak için: PAYLOAD_MCP_DISABLED=true
+   */
+  mcpPlugin({
+    disabled: process.env.PAYLOAD_MCP_DISABLED === 'true',
+    userCollection: 'users',
+    collections: {
+      services: {
+        description: 'ISO hizmetleri (başlık, slug, özet, içerik, sıralama, SEO).',
+        enabled: { create: true, delete: true, find: true, update: true },
+      },
+      posts: {
+        description: 'Haber / blog yazıları (başlık, slug, yayın tarihi, özet, içerik, SEO).',
+        enabled: { create: true, delete: true, find: true, update: true },
+      },
+      projects: {
+        description: 'Etkinlik ve projeler (başlık, slug, tarih, galeri, içerik).',
+        enabled: { create: true, delete: true, find: true, update: true },
+      },
+      pages: {
+        description: 'Kurumsal / yasal statik sayfalar (KVKK, çerez politikası vb.).',
+        enabled: { create: true, delete: true, find: true, update: true },
+      },
+      faq: {
+        description: 'Sıkça sorulan sorular (soru, cevap, sıralama).',
+        enabled: { create: true, delete: true, find: true, update: true },
+      },
+      media: {
+        description: 'Görsel ve dosya kütüphanesi. Yeni dosya yükleme panelden yapılır.',
+        enabled: { find: true, update: true },
+      },
+      'contact-submissions': {
+        description: 'İletişim formu kayıtları. Salt okunur.',
+        enabled: { find: true },
+      },
+    },
+    globals: {
+      'site-settings': {
+        description: 'Site geneli ayarlar: logo, favicon, site adı, varsayılan SEO.',
+        enabled: { find: true, update: true },
+      },
+      'contact-info': {
+        description: 'İletişim bilgileri: adres, telefon, e-posta, çalışma saatleri, sosyal medya.',
+        enabled: { find: true, update: true },
+      },
+    },
+    mcp: {
+      handlerOptions: {
+        verboseLogs: process.env.NODE_ENV === 'development',
+      },
+      serverOptions: {
+        instructions:
+          'Bu sunucu ISO belgelendirme tanıtım sitesinin Payload CMS içeriğini yönetir. ' +
+          'Slug alanları Türkçe-uyumlu ve tirelidir (ör. iso-27001-bilgi-guvenligi). ' +
+          'Zengin metin alanları Lexical JSON biçimindedir. ' +
+          'contact-submissions salt okunurdur.',
+        serverInfo: {
+          name: 'dogan-iso-payload',
+          version: '1.0.0',
+        },
+      },
     },
   }),
 ]

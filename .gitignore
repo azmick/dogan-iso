@@ -31,6 +31,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# Claude Code yerel ayarları (MCP API anahtarını içerir)
+.claude/settings.local.json
+
 # vercel
 .vercel
 
