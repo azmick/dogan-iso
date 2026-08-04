@@ -16,17 +16,30 @@ type SiteNavProps = {
 const isActive = (pathname: string, href: string): boolean =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
 
+type MenuState = {
+  /** Menünün açıldığı sayfa — adres değişince menü kendiliğinden kapanır. */
+  path: string
+  open: boolean
+  accordion: string | null
+}
+
+const CLOSED: Omit<MenuState, 'path'> = { open: false, accordion: null }
+
 export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
   const pathname = usePathname()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null)
+  const [menu, setMenu] = useState<MenuState>({ path: pathname, ...CLOSED })
   const panelId = useId()
 
-  // Sayfa değişince menüyü kapat
-  useEffect(() => {
-    setMobileOpen(false)
-    setOpenAccordion(null)
-  }, [pathname])
+  // Sayfa değiştiyse menü durumunu efekt kullanmadan sıfırla
+  const current = menu.path === pathname ? menu : { path: pathname, ...CLOSED }
+  const mobileOpen = current.open
+  const openAccordion = current.accordion
+
+  const setMobileOpen = (open: boolean) =>
+    setMenu({ path: pathname, open, accordion: open ? current.accordion : null })
+
+  const setOpenAccordion = (accordion: string | null) =>
+    setMenu({ path: pathname, open: current.open, accordion })
 
   // Menü açıkken arka planın kaymasını engelle
   useEffect(() => {
@@ -36,7 +49,7 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
     document.body.style.overflow = 'hidden'
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMobileOpen(false)
+      if (event.key === 'Escape') setMenu((state) => ({ path: state.path, ...CLOSED }))
     }
 
     window.addEventListener('keydown', onKeyDown)
@@ -114,7 +127,7 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
       {/* ---------- Mobil menü düğmesi ---------- */}
       <button
         type="button"
-        onClick={() => setMobileOpen((open) => !open)}
+        onClick={() => setMobileOpen(!mobileOpen)}
         aria-expanded={mobileOpen}
         aria-controls={panelId}
         aria-label={mobileOpen ? 'Menüyü kapat' : 'Menüyü aç'}

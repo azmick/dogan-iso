@@ -1,67 +1,123 @@
-# Payload Blank Template
+# ISO Belgelendirme / Denetim Tanıtım Sitesi
 
-This template comes configured with the bare minimum to get started on anything you need.
+Next.js (App Router) + Payload CMS 3 ile geliştirilen, tamamen panelden yönetilebilen kurumsal tanıtım sitesi.
+Proje kuralları ve tasarım kararları için [CLAUDE.md](CLAUDE.md) dosyasına bakın.
 
-## Quick start
+> **Not:** Sitedeki tüm metinler, iletişim bilgileri ve görseller **temsilidir**. Gerçek bilgiler
+> yönetim panelinden girilecektir.
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Teknoloji
 
-## Quick Start - local setup
+| Katman | Seçim |
+| --- | --- |
+| Framework | Next.js 16 (App Router, TypeScript, Server Components) |
+| CMS | Payload CMS 3 (aynı proje içinde gömülü) |
+| Veritabanı | Neon Postgres (`@payloadcms/db-postgres`) |
+| Dosya yükleme | Vercel Blob (`clientUploads: true`) |
+| Stil | Tailwind CSS v4 (CSS-first `@theme` token'ları) |
+| Zengin metin | Payload Lexical editörü |
+| SEO | `@payloadcms/plugin-seo`, `generateMetadata`, `sitemap.ts`, `robots.ts`, JSON-LD |
+| Deploy | Vercel |
 
-To spin up this template locally, follow these steps:
+## Kurulum
 
-### Clone
+### 1. Bağımlılıklar
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+```bash
+pnpm install
+```
 
-### Development
+### 2. Ortam değişkenleri
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+`.env` dosyasındaki değerleri doldurun (`.env.example` şablondur):
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+| Değişken | Açıklama |
+| --- | --- |
+| `DATABASE_URI` | Neon Postgres bağlantı adresi (pooled connection string) |
+| `PAYLOAD_SECRET` | Rastgele uzun bir dize (oturum/şifreleme anahtarı) |
+| `NEXT_PUBLIC_SERVER_URL` | Sitenin genel adresi — canonical, OpenGraph ve sitemap için |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob okuma/yazma anahtarı. Boşsa yüklemeler yerel diske gider (yalnızca geliştirme). |
+| `SMTP_*`, `CONTACT_NOTIFY_TO` | İletişim formu e-posta bildirimi (opsiyonel; boşsa kayıt yalnızca panele düşer) |
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+Neon bağlantı adresini almak için: [neon.com](https://neon.com) → yeni proje →
+**Connection string** → *Pooled connection* seçeneği.
 
-#### Docker (Optional)
+### 3. Geliştirme sunucusu
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+```bash
+pnpm dev
+```
 
-To do so, follow these steps:
+- Site: http://localhost:3000
+- Yönetim paneli: http://localhost:3000/admin
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+Geliştirmede veritabanı şeması otomatik güncellenir (`push: true`).
 
-## How it works
+### 4. Temsili içerikleri yükle
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+```bash
+pnpm seed
+```
 
-### Collections
+Yönetici kullanıcı, 9 hizmet, 4 kurumsal/yasal sayfa, 6 haber, 4 etkinlik ve 8 SSS kaydı ekler.
+Dolu koleksiyonlara dokunmaz, tekrar tekrar çalıştırılabilir.
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+Varsayılan yönetici bilgileri (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` ile değiştirilebilir):
 
-- #### Users (Authentication)
+```
+admin@ornek-firma.com.tr / Degistir!2026
+```
 
-  Users are auth-enabled collections that have access to the admin panel.
+**İlk girişten sonra parolayı mutlaka değiştirin.**
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+## Komutlar
 
-- #### Media
+| Komut | Açıklama |
+| --- | --- |
+| `pnpm dev` | Geliştirme sunucusu |
+| `pnpm build` | Production derlemesi |
+| `pnpm start` | Derlenmiş sürümü çalıştırır |
+| `pnpm lint` | ESLint |
+| `pnpm generate:types` | `src/payload-types.ts` dosyasını yeniden üretir |
+| `pnpm seed` | Temsili içerikleri yükler |
+| `pnpm migrate:create` | Şema değişikliği için migration üretir |
+| `pnpm migrate` | Bekleyen migration'ları uygular |
+| `pnpm ci` | `migrate` + `build` (Vercel build komutu) |
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+## Proje yapısı
 
-### Docker
+```
+src/
+├── access/            Payload erişim kuralları (herkese okuma / girişe yazma)
+├── app/
+│   ├── (frontend)/    Site sayfaları, sitemap.ts, robots.ts, styles.css
+│   └── (payload)/     Payload yönetim paneli ve REST/GraphQL uçları
+├── collections/       services, posts, projects, pages, faq, media, contact-submissions, users
+├── components/        Header, Footer, HeroSlider, kartlar, form, lightbox vb.
+├── fields/            Türkçe-uyumlu slug alanı
+├── globals/           site-settings, contact-info
+├── lib/               Payload veri erişimi, SEO, medya ve biçimlendirme yardımcıları
+└── seed/              Temsili içerik ve yükleyici
+```
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+## İçerik yönetimi
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+Panelde tüm içerik türleri Türkçe etiketlerle listelenir:
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+- **İçerik:** Hizmetler, Haberler, Etkinlikler, Sayfalar, SSS, Medya
+- **Ayarlar:** Site Ayarları (logo, favicon, varsayılan SEO), İletişim Bilgileri (adres, telefon,
+  WhatsApp, e-posta, harita, sosyal medya, faydalı linkler)
+- **Yönetim:** İletişim Formu Kayıtları, Kullanıcılar
 
-## Questions
+Header'daki *Kurumsal* menüsü `Sayfalar` koleksiyonundaki "Kurumsal menüsünde göster" işaretli
+kayıtlardan, *Hizmetlerimiz* menüsü ise `Hizmetler` koleksiyonundan otomatik oluşur.
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+## Vercel'e deploy
+
+1. Projeyi bir Git deposuna gönderin ve Vercel'de içe aktarın.
+2. Ortam değişkenlerini Vercel proje ayarlarına ekleyin (`DATABASE_URI`, `PAYLOAD_SECRET`,
+   `NEXT_PUBLIC_SERVER_URL`, `BLOB_READ_WRITE_TOKEN`, gerekiyorsa `SMTP_*`).
+3. Vercel > Storage > **Blob** deposu oluşturup token'ı ekleyin.
+4. Build komutunu `pnpm ci` yapın — böylece derlemeden önce migration'lar uygulanır.
+
+Production'da `push` kapalıdır; şema değişikliklerini `pnpm migrate:create` ile üretip commit edin.
