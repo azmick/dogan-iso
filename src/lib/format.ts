@@ -20,6 +20,20 @@ export const toISODate = (value?: string | null): string =>
 export const toTelHref = (value?: string | null): string =>
   value ? `tel:${value.replace(/[^\d+]/g, '')}` : ''
 
+/**
+ * E-posta adresini "@" işaretinden sonra ikiye böler.
+ * Footer gibi dar sütunlarda adres satıra sığmadığında kelimenin ortasından
+ * ("...com.t" + "r" gibi) değil, "@" işaretinden sonra alt satıra insin diye
+ * araya <wbr> koymakta kullanılır.
+ */
+export const splitEmail = (value?: string | null): [string, string] => {
+  if (!value) return ['', '']
+
+  const at = value.indexOf('@')
+
+  return at === -1 ? [value, ''] : [value.slice(0, at + 1), value.slice(at + 1)]
+}
+
 /** WhatsApp bağlantısı (wa.me sadece rakam ister). */
 export const toWhatsAppHref = (value?: string | null): string =>
   value ? `https://wa.me/${value.replace(/\D/g, '')}` : ''

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from '@/components/Icons'
 import { Logo } from '@/components/Logo'
 import { SocialLinks } from '@/components/SocialLinks'
-import { toTelHref } from '@/lib/format'
+import { splitEmail, toTelHref } from '@/lib/format'
 import { getContactInfo, getCorporateMenuPages, getSiteSettings } from '@/lib/payload'
 import { ROUTES } from '@/lib/site'
 
@@ -26,6 +26,8 @@ export const Footer = async () => {
 
   const siteName = settings?.siteName || 'Örnek ISO Belgelendirme'
   const usefulLinks = contact?.usefulLinks ?? []
+  // Dar sütunda adres "@" işaretinden sonra kırılsın diye iki parçaya ayrılıyor.
+  const [emailLocal, emailDomain] = splitEmail(contact?.email)
 
   return (
     <footer className="mt-auto bg-navy text-white/75">
@@ -117,9 +119,11 @@ export const Footer = async () => {
                   <MailIcon width={17} height={17} className="mt-0.5 shrink-0 text-accent" />
                   <a
                     href={`mailto:${contact.email}`}
-                    className="break-all transition-colors hover:text-accent"
+                    className="break-words transition-colors hover:text-accent"
                   >
-                    {contact.email}
+                    {emailLocal}
+                    <wbr />
+                    {emailDomain}
                   </a>
                 </li>
               ) : null}
