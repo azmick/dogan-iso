@@ -147,13 +147,16 @@
     background-color: var(--color-primary-dark);
   }
 
+  /* Beyaz metin --color-accent (#1592B5) üzerinde yalnızca 3,61:1 veriyor;
+     15px/600 metin için WCAG AA 4,5:1 istiyor. Zemin bir ton koyulaştırıldı
+     (#0F7091 → 5,60:1), hover ondan da koyu. */
   .btn-accent {
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-dark);
     color: var(--color-text-invert);
   }
 
   .btn-accent:hover {
-    background-color: var(--color-accent-dark);
+    background-color: color-mix(in srgb, var(--color-accent-dark) 85%, black);
   }
 
   .btn-outline {

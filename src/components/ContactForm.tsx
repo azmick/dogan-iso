@@ -73,7 +73,7 @@ export const ContactForm = () => {
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>
-            Ad Soyad <span className="text-accent">*</span>
+            Ad Soyad <span className="text-accent-dark">*</span>
           </label>
           <input
             id="name"
@@ -91,7 +91,7 @@ export const ContactForm = () => {
 
         <div>
           <label htmlFor="email" className={labelClass}>
-            E-posta <span className="text-accent">*</span>
+            E-posta <span className="text-accent-dark">*</span>
           </label>
           <input
             id="email"
@@ -127,7 +127,7 @@ export const ContactForm = () => {
 
         <div>
           <label htmlFor="subject" className={labelClass}>
-            Konu <span className="text-accent">*</span>
+            Konu <span className="text-accent-dark">*</span>
           </label>
           <input
             id="subject"
@@ -145,7 +145,7 @@ export const ContactForm = () => {
 
       <div>
         <label htmlFor="message" className={labelClass}>
-          Mesajınız <span className="text-accent">*</span>
+          Mesajınız <span className="text-accent-dark">*</span>
         </label>
         <textarea
           id="message"
@@ -179,7 +179,7 @@ export const ContactForm = () => {
               KVKK Aydınlatma Metni
             </Link>
             ’ni okudum, kişisel verilerimin bu kapsamda işlenmesini kabul ediyorum.{' '}
-            <span className="text-accent">*</span>
+            <span className="text-accent-dark">*</span>
           </span>
         </label>
         <FieldError id="kvkk-error" message={errors.kvkk} />
@@ -188,7 +188,7 @@ export const ContactForm = () => {
       <div>
         <SubmitButton />
         <p className="mt-3 text-xs text-text-muted">
-          <span className="text-accent">*</span> işaretli alanlar zorunludur.
+          <span className="text-accent-dark">*</span> işaretli alanlar zorunludur.
         </p>
       </div>
     </form>

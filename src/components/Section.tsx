@@ -40,7 +40,7 @@ export const Section = ({
         >
           <div className={`max-w-3xl ${centered ? 'mx-auto text-center' : ''}`}>
             {eyebrow ? (
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent-dark">
                 {eyebrow}
               </p>
             ) : null}

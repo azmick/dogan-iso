@@ -85,7 +85,7 @@ export default async function HomePage() {
           </div>
 
           <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent-dark">
               Hakkımızda
             </p>
 
