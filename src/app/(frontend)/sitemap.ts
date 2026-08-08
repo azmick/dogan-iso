@@ -22,7 +22,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl(ROUTES.about), lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: absoluteUrl(ROUTES.services), lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: absoluteUrl(ROUTES.projects), lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: absoluteUrl(ROUTES.gallery), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: absoluteUrl(ROUTES.posts), lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: absoluteUrl(ROUTES.faq), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: absoluteUrl(ROUTES.contact), lastModified: now, changeFrequency: 'yearly', priority: 0.8 },

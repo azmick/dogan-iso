@@ -112,7 +112,6 @@ KVKK Teknik Gereksinim Çözümleri
 Eğitim ve Seminer Hizmetleri
 SGK Teşvik Danışmanlığı (Bir de opsiyonel /hizmetler liste sayfası yap.)
 Etkinlikler / Projeler — liste /etkinlikler, detay /etkinlikler/[slug]
-Medya / Galeri — /galeri (foto galeri; video bölümü opsiyonel)
 Haberler / Blog — liste /haberler, detay /haberler/[slug]
 İletişim — /iletisim
 Kurumsal / Yasal sayfalar (statik içerik, pages koleksiyonundan):
@@ -124,7 +123,7 @@ SSS — /sss
 6. Sayfa İskeletleri (bölüm bölüm)
 6.1 Header (tüm sayfalarda, sabit/sticky)
 Üst bar (ince şerit): solda adres + telefon (placeholder); sağda "Haberler", "İletişim" linkleri + e-posta + sosyal medya ikonları (Facebook, X, LinkedIn, Instagram).
-Ana bar: solda logo (placeholder); sağda yatay menü: Ana Sayfa · Kurumsal ▾ · Hizmetlerimiz ▾ · Etkinliklerimiz · Medya · İletişim
+Ana bar: solda logo (placeholder); sağda yatay menü: Ana Sayfa · Kurumsal ▾ · Hizmetlerimiz ▾ · Etkinliklerimiz · İletişim
 belirgin bir "İletişim / Teklif Al" butonu (accent renkte).
 Kurumsal ▾ alt menü: Hakkımızda, KVKK Aydınlatma Metni, KVKK Başvuru Formu, Çerez Politikası, KVKK Rehberleri.
 Hizmetlerimiz ▾ alt menü: Bölüm 5'teki 9 hizmet.
@@ -132,7 +131,7 @@ Mobilde: hamburger menü, açılır panel, alt menüler açılabilir (accordion)
 6.2 Footer (tüm sayfalarda)
 Üst kısım: logo (açık/ters versiyon) + sosyal medya ikonları.
 Sütunlar:
-Hızlı Linkler: Ana Sayfa, Hakkımızda, Haberler, Galeri, SSS, İletişim
+Hızlı Linkler: Ana Sayfa, Hakkımızda, Hizmetlerimiz, Haberler, Etkinliklerimiz, SSS, İletişim
 İletişim: adres, telefon, e-posta (placeholder)
 Faydalı Linkler: ilgili resmî kaynaklara dış bağlantılar (placeholder linkler)
 Alt şerit: telif satırı ("© [YIL] [Firma Adı]. Tüm hakları saklıdır.").
@@ -159,9 +158,8 @@ generateMetadata ile SEO; Service + BreadcrumbList JSON-LD.
 6.6 Etkinlikler / Projeler
 Liste (/etkinlikler): proje kartları grid (görsel + başlık + kısa açıklama + link).
 Detay (/etkinlikler/[slug]): breadcrumb, H1, görsel(ler)/galeri, içerik metni, tarih.
-6.7 Medya / Galeri (/galeri)
-Foto galeri: responsive grid + lightbox (tıklayınca büyüt).
-(Opsiyonel) Video galeri sekmesi.
+6.7 Görseller — ayrı medya/galeri sayfası YOK
+Müşteri kararı: bağımsız bir /galeri (Medya) sayfası kaldırıldı, yeniden eklenmeyecek. Görseller ilgili sayfaların içinde yaşar: etkinlik detayında lightbox'lı foto galeri (LightboxGallery), diğer sayfalarda kapak/içerik görselleri. Panelin Medya Kütüphanesi koleksiyonu (media) aynen kalır — tüm görseller oradan yüklenir.
 6.8 Haberler / Blog
 Liste (/haberler): haber kartları (görsel, başlık, tarih, özet, "Devamı →"). Sayfalama.
 Detay (/haberler/[slug]): breadcrumb, H1, tarih, kapak görseli, içerik, paylaş butonları. Article + BreadcrumbList JSON-LD.
@@ -206,7 +204,7 @@ Payload + Next.js kurulumu (Postgres/Neon), .env, ilk admin, panelin açılması
 Collections + Globals'ı tanımla; birkaç temsili kayıt gir.
 Global düzen: Header + Footer + Tailwind + renk token'ları + tipografi.
 Ana sayfa (bölümleriyle), veriyi Payload'dan çekerek.
-Hizmet detay (dinamik) + liste; sonra Haberler, Etkinlikler, Galeri.
+Hizmet detay (dinamik) + liste; sonra Haberler, Etkinlikler.
 İletişim (form + harita + e-posta) + yasal sayfalar + SSS + çerez banner'ı.
 SEO katmanı: metadata, sitemap.ts, robots.ts, JSON-LD, OpenGraph.
 Vercel Blob yapılandırması + deploy hazırlığı (migration, build ayarları).

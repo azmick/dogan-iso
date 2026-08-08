@@ -2,15 +2,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import type {
-  ContactInfo,
-  Faq,
-  Page,
-  Post,
-  Project,
-  Service,
-  SiteSetting,
-} from '@/payload-types'
+import type { ContactInfo, Faq, Page, Post, Project, Service, SiteSetting } from '@/payload-types'
 
 /** Payload Local API istemcisi (istek başına tekilleştirilmiş). */
 export const getPayloadClient = cache(async () => getPayload({ config }))
@@ -48,18 +40,20 @@ export const getServices = cache(async (limit = 100): Promise<Service[]> => {
 })
 
 /** Menü ve yan panel için yalnızca başlık + slug. */
-export const getServiceLinks = cache(async (): Promise<Pick<Service, 'id' | 'title' | 'slug'>[]> => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'services',
-    limit: 100,
-    depth: 0,
-    sort: 'order',
-    select: { title: true, slug: true },
-  })
+export const getServiceLinks = cache(
+  async (): Promise<Pick<Service, 'id' | 'title' | 'slug'>[]> => {
+    const payload = await getPayloadClient()
+    const { docs } = await payload.find({
+      collection: 'services',
+      limit: 100,
+      depth: 0,
+      sort: 'order',
+      select: { title: true, slug: true },
+    })
 
-  return docs as Pick<Service, 'id' | 'title' | 'slug'>[]
-})
+    return docs as Pick<Service, 'id' | 'title' | 'slug'>[]
+  },
+)
 
 export const getServiceBySlug = cache(async (slug: string): Promise<Service | null> => {
   const payload = await getPayloadClient()
@@ -158,19 +152,21 @@ export const getPageBySlug = cache(async (slug: string): Promise<Page | null> =>
 })
 
 /** Header'daki "Kurumsal" açılır menüsü. */
-export const getCorporateMenuPages = cache(async (): Promise<Pick<Page, 'id' | 'title' | 'slug'>[]> => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'pages',
-    where: { showInCorporateMenu: { equals: true } },
-    limit: 20,
-    depth: 0,
-    sort: 'menuOrder',
-    select: { title: true, slug: true },
-  })
+export const getCorporateMenuPages = cache(
+  async (): Promise<Pick<Page, 'id' | 'title' | 'slug'>[]> => {
+    const payload = await getPayloadClient()
+    const { docs } = await payload.find({
+      collection: 'pages',
+      where: { showInCorporateMenu: { equals: true } },
+      limit: 20,
+      depth: 0,
+      sort: 'menuOrder',
+      select: { title: true, slug: true },
+    })
 
-  return docs as Pick<Page, 'id' | 'title' | 'slug'>[]
-})
+    return docs as Pick<Page, 'id' | 'title' | 'slug'>[]
+  },
+)
 
 /* ------------------------------------------------------------------ */
 /* SSS                                                                 */
@@ -183,23 +179,6 @@ export const getFaqs = cache(async (): Promise<Faq[]> => {
     limit: 100,
     depth: 0,
     sort: 'order',
-  })
-
-  return docs
-})
-
-/* ------------------------------------------------------------------ */
-/* Galeri                                                              */
-/* ------------------------------------------------------------------ */
-
-export const getGalleryImages = cache(async (limit = 60) => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'media',
-    limit,
-    depth: 0,
-    sort: '-createdAt',
-    where: { mimeType: { like: 'image' } },
   })
 
   return docs

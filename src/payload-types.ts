@@ -226,7 +226,7 @@ export interface Media {
    */
   alt: string;
   /**
-   * Galeride görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.
+   * Etkinlik galerilerinde görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.
    */
   caption?: string | null;
   updatedAt: string;
@@ -333,7 +333,7 @@ export interface Post {
   createdAt: string;
 }
 /**
- * Fuar, eğitim, seminer ve proje kayıtları. Buraya eklediğiniz fotoğraflar /galeri sayfasında da görünür.
+ * Fuar, eğitim, seminer ve proje kayıtları. Her kayıt kendi detay sayfasında fotoğraflarıyla yayınlanır.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".

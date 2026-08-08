@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Medya/galeri sayfası kaldırıldı; görseller artık ilgili sayfaların içinde.
+  // Dışarıda kalmış eski bağlantılar 404 yerine etkinliklere gitsin.
+  redirects: async () => [
+    {
+      source: '/galeri',
+      destination: '/etkinlikler',
+      permanent: true,
+    },
+  ],
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

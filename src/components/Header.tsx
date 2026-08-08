@@ -36,7 +36,6 @@ export const Header = async () => {
       })),
     },
     { label: 'Etkinliklerimiz', href: ROUTES.projects },
-    { label: 'Medya', href: ROUTES.gallery },
     { label: 'İletişim', href: ROUTES.contact },
   ]
 

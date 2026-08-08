@@ -12,7 +12,7 @@ const QUICK_LINKS = [
   { label: 'Hakkımızda', href: ROUTES.about },
   { label: 'Hizmetlerimiz', href: ROUTES.services },
   { label: 'Haberler', href: ROUTES.posts },
-  { label: 'Medya / Galeri', href: ROUTES.gallery },
+  { label: 'Etkinliklerimiz', href: ROUTES.projects },
   { label: 'Sıkça Sorulan Sorular', href: ROUTES.faq },
   { label: 'İletişim', href: ROUTES.contact },
 ]

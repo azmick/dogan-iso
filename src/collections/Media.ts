@@ -40,7 +40,8 @@ export const Media: CollectionConfig = {
       type: 'text',
       label: 'Alt Yazı (isteğe bağlı)',
       admin: {
-        description: 'Galeride görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.',
+        description:
+          'Etkinlik galerilerinde görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.',
       },
     },
   ],

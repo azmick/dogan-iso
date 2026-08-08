@@ -16,7 +16,7 @@ export const Projects: CollectionConfig = {
     defaultColumns: ['title', 'date', 'updatedAt'],
     listSearchableFields: ['title', 'excerpt', 'slug'],
     description:
-      'Fuar, eğitim, seminer ve proje kayıtları. Buraya eklediğiniz fotoğraflar /galeri sayfasında da görünür.',
+      'Fuar, eğitim, seminer ve proje kayıtları. Her kayıt kendi detay sayfasında fotoğraflarıyla yayınlanır.',
     preview: previewUrl('/etkinlikler'),
     pagination: { defaultLimit: 25 },
   },
@@ -81,7 +81,7 @@ export const Projects: CollectionConfig = {
           label: 'Fotoğraf Galerisi',
           admin: {
             description:
-              'Bu etkinliğe ait fotoğraflar. Buradaki görseller sitedeki /galeri sayfasında da listelenir.',
+              'Bu etkinliğe ait fotoğraflar. Etkinliğin detay sayfasında, metnin altındaki galeri bölümünde listelenir.',
           },
           fields: [
             {
