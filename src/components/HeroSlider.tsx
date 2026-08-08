@@ -93,7 +93,7 @@ export const HeroSlider = ({ slides, interval = 6500 }: HeroSliderProps) => {
               ) : (
                 <div
                   aria-hidden
-                  className="h-full w-full bg-[radial-gradient(120%_120%_at_15%_10%,#12518f_0%,#0c3c78_45%,#0a1f3c_100%)]"
+                  className="absolute inset-0 bg-[radial-gradient(120%_120%_at_15%_10%,#12518f_0%,#0c3c78_45%,#0a1f3c_100%)]"
                 />
               )}
 
@@ -160,8 +160,9 @@ export const HeroSlider = ({ slides, interval = 6500 }: HeroSliderProps) => {
             <ChevronRightIcon />
           </button>
 
-          {/* Nokta göstergeleri */}
-          <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2.5">
+          {/* Nokta göstergeleri — nokta küçük kalır, dokunma hedefi 32x26px'e
+              genişletilir (WCAG 2.2 "Target Size (Minimum)" eşiği 24x24px). */}
+          <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center">
             {slides.map((slide, index) => (
               <button
                 key={slide.title}
@@ -169,10 +170,15 @@ export const HeroSlider = ({ slides, interval = 6500 }: HeroSliderProps) => {
                 onClick={() => goTo(index)}
                 aria-label={`${index + 1}. slayta git: ${slide.title}`}
                 aria-current={index === current}
-                className={`h-2.5 rounded-full transition-all ${
-                  index === current ? 'w-8 bg-accent' : 'w-2.5 bg-white/40 hover:bg-white/70'
-                }`}
-              />
+                className="group flex h-8 items-center justify-center px-2"
+              >
+                <span
+                  aria-hidden
+                  className={`block h-2.5 rounded-full transition-all ${
+                    index === current ? 'w-8 bg-accent' : 'w-2.5 bg-white/40 group-hover:bg-white/70'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </>
