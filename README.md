@@ -42,6 +42,13 @@ pnpm install
 Neon bağlantı adresini almak için: [neon.com](https://neon.com) → yeni proje →
 **Connection string** → *Pooled connection* seçeneği.
 
+> **SSL notu:** Neon'un verdiği adres `?sslmode=require` ile biter; bunu
+> `?sslmode=verify-full` yapın (canlıdaki Vercel değişkeninde de). node-postgres
+> bugün `require`'ı da tam doğrulama sayıyor, ama pg v9'da `require` sertifika
+> doğrulamayı bırakacak; `verify-full` yazmak hem "SECURITY WARNING: The SSL
+> modes 'prefer', 'require'..." uyarısını susturur hem de yükseltmede güvenliğin
+> sessizce düşmesini engeller.
+
 ### 3. Geliştirme sunucusu
 
 ```bash
