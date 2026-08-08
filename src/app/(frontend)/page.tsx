@@ -77,7 +77,7 @@ export default async function HomePage() {
             />
 
             <div className="absolute -bottom-6 -right-2 hidden rounded-lg bg-primary px-6 py-5 text-white shadow-[var(--shadow-card-hover)] sm:block lg:-right-6">
-              <p className="text-3xl font-extrabold leading-none">15+</p>
+              <p className="text-3xl font-extrabold leading-none">20+</p>
               <p className="mt-1.5 text-xs font-medium uppercase tracking-wider text-white/70">
                 Yıllık tecrübe
               </p>
