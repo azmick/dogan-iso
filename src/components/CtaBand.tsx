@@ -14,7 +14,7 @@ type CtaBandProps = {
 
 /** Koyu mavi zeminli teklif/iletişim çağrısı şeridi. */
 export const CtaBand = async ({
-  title = 'Belgelendirme süreciniz için teklif alın',
+  title = 'Belgelendirme danışmanlığı süreciniz için teklif alın',
   description = 'İhtiyacınıza uygun kapsam, süre ve maliyeti birlikte belirleyelim. Uzman ekibimiz aynı gün içinde size dönüş yapsın.',
   buttonLabel = 'Teklif Al',
   buttonHref = ROUTES.contact,

@@ -65,31 +65,30 @@ export default function AboutPage() {
             <h2 className="section-title text-2xl sm:text-3xl">Firmamız Kimdir?</h2>
 
             <p>
-              Kuruluşumuz; ISO 9001, ISO 14001, ISO 45001, ISO 27001 ve ISO 27701 başta olmak
-              üzere yönetim sistemi standartlarında denetim ve belgelendirme hizmeti veren
-              bağımsız bir kuruluştur. Aynı çatı altında KVKK uyum danışmanlığı, teknik
-              gereksinim çözümleri, eğitim ve SGK teşvik danışmanlığı hizmetleri de sunuyoruz.
+              Kuruluşumuz; ISO 27001 ve ISO 27701, ISO 22301, ISO 9001 başta olmak üzere yönetim
+              sistemi standartlarında denetim ve danışmanlık hizmeti veren bağımsız bir kuruluştur.
+              Aynı çatı altında KVKK uyum danışmanlığı, teknik gereksinim çözümleri, eğitim ve SGK
+              teşvik danışmanlığı hizmetleri de sunuyoruz.
             </p>
 
             <p>
               Denetim yaklaşımımız, kuruluşların günlük işleyişini aksatmadan gerçek riskleri
-              görünür kılmayı hedefler. Denetim ekiplerimiz; kuruluşun sektörü, ölçeği ve
-              süreç olgunluğu dikkate alınarak oluşturulur. Böylece hem standardın
-              gereklilikleri karşılanır hem de kuruluşa somut bir iyileştirme yol haritası
-              bırakılır.
+              görünür kılmayı hedefler. Denetim ekiplerimiz; kuruluşun sektörü, ölçeği ve süreç
+              olgunluğu dikkate alınarak oluşturulur. Böylece hem standardın gereklilikleri
+              karşılanır hem de kuruluşa somut bir iyileştirme yol haritası bırakılır.
             </p>
 
             <p>
-              Belgelendirme kararları, denetimi gerçekleştiren ekipten bağımsız bir karar
-              vericisi tarafından alınır. Bu ayrım, tarafsızlık ilkemizin uygulamadaki
-              karşılığıdır. Tüm denetim kayıtları gizlilik prosedürlerimiz kapsamında saklanır
-              ve üçüncü taraflarla paylaşılmaz.
+              Belgelendirme kararları, denetimi gerçekleştiren ekipten bağımsız bir karar vericisi
+              tarafından alınır. Bu ayrım, tarafsızlık ilkemizin uygulamadaki karşılığıdır. Tüm
+              denetim kayıtları gizlilik prosedürlerimiz kapsamında saklanır ve üçüncü taraflarla
+              paylaşılmaz.
             </p>
 
             <p className="text-sm text-text-muted">
               <em>
-                Bu sayfadaki metinler temsilidir; yönetim panelinden kendi kurumsal
-                metinlerinizle değiştirilebilir.
+                Bu sayfadaki metinler temsilidir; yönetim panelinden kendi kurumsal metinlerinizle
+                değiştirilebilir.
               </em>
             </p>
           </div>
@@ -110,9 +109,7 @@ export default function AboutPage() {
                 >
                   <dt className="sr-only">{stat.label}</dt>
                   <dd>
-                    <span className="block text-2xl font-extrabold text-primary">
-                      {stat.value}
-                    </span>
+                    <span className="block text-2xl font-extrabold text-primary">{stat.value}</span>
                     <span className="mt-1 block text-[11px] font-medium uppercase tracking-wider text-text-muted">
                       {stat.label}
                     </span>
@@ -163,7 +160,10 @@ export default function AboutPage() {
 
         <p className="mt-8 text-[15px] text-text-muted">
           Hizmet kapsamlarımızı{' '}
-          <Link href={ROUTES.services} className="font-semibold text-link underline underline-offset-2">
+          <Link
+            href={ROUTES.services}
+            className="font-semibold text-link underline underline-offset-2"
+          >
             Hizmetlerimiz
           </Link>{' '}
           sayfasından inceleyebilir, sorularınız için{' '}

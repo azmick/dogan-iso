@@ -52,7 +52,7 @@ const HIGHLIGHTS = [
 ]
 
 const STATS = [
-  { value: '15+', label: 'Yıllık saha tecrübesi' },
+  { value: '20+', label: 'Yıllık saha tecrübesi' },
   { value: '500+', label: 'Tamamlanan denetim' },
   { value: '9', label: 'Yönetim sistemi standardı' },
   { value: '%98', label: 'Denetim başarı oranı' },
@@ -95,10 +95,10 @@ export default async function HomePage() {
 
             <p className="mt-6 text-[15px] leading-relaxed text-text-muted md:text-base">
               Kuruluşumuz, yönetim sistemi standartlarının kurulması, denetlenmesi ve
-              belgelendirilmesi alanında hizmet veren bağımsız bir belgelendirme kuruluşudur.
-              Bilgi güvenliğinden kalite yönetimine, çevre performansından iş sağlığı ve
-              güvenliğine kadar geniş bir kapsamda; tarafsızlık, gizlilik ve şeffaflık
-              ilkelerine bağlı kalarak çalışırız.
+              belgelendirilmesi alanında hizmet veren bir danışmanlık kuruluşudur. Bilgi
+              güvenliğinden kalite yönetimine, çevre performansından iş sağlığı ve güvenliğine kadar
+              geniş bir kapsamda; tarafsızlık, gizlilik ve şeffaflık ilkelerine bağlı kalarak
+              çalışırız.
             </p>
 
             <ul className="mt-7 space-y-3.5">
