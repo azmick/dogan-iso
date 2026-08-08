@@ -32,6 +32,13 @@ const runRevalidate = (req: PayloadRequest, paths: string[], subtrees: string[] 
   }
 }
 
+/**
+ * Sayfa olmayan, ama içeriğin tamamından beslenen uçlar. Hangi kayıt değişirse
+ * değişsin bunlar da tazelenmeli, yoksa arama motorları ve dil modelleri
+ * bayat bir liste okur.
+ */
+const CONTENT_FEEDS = ['/sitemap.xml', '/llms.txt', '/llms-full.txt']
+
 const slugOf = (doc: unknown): string | undefined => {
   const slug = (doc as { slug?: unknown } | undefined)?.slug
 
@@ -43,7 +50,7 @@ const slugOf = (doc: unknown): string | undefined => {
  * (hizmetler, kurumsal sayfalar, medya, global ayarlar) için kullanılır.
  */
 export const revalidateWholeSite = (req: PayloadRequest) =>
-  runRevalidate(req, ['/sitemap.xml'], ['/'])
+  runRevalidate(req, CONTENT_FEEDS, ['/'])
 
 export const revalidateWholeSiteAfterChange: CollectionAfterChangeHook = ({ doc, req }) => {
   revalidateWholeSite(req)
@@ -74,7 +81,7 @@ export const revalidateCollectionHooks = (basePath: string, extraPaths: string[]
     ...extraPaths,
     basePath,
     ...(slug ? [`${basePath}/${slug}`] : []),
-    '/sitemap.xml',
+    ...CONTENT_FEEDS,
   ]
 
   const afterChange: CollectionAfterChangeHook = ({ doc, previousDoc, req }) => {
