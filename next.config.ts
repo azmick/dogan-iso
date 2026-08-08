@@ -7,6 +7,12 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // CSS'i <link rel="stylesheet"> yerine HTML'in içine <style> olarak göm.
+    // Böylece ilk boyama için ayrı CSS isteği beklenmez (render-blocking kalkar).
+    // Frontend CSS'i ~45 KB ham / ~7 KB sıkıştırılmış olduğundan gömmek karlı.
+    inlineCss: true,
+  },
   images: {
     localPatterns: [
       {
