@@ -54,7 +54,12 @@ export const Footer = async () => {
         </div>
 
         {/* Sütunlar */}
-        <div className="grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        {/*
+          Masaüstünde sütunlar eşit değil: İletişim sütunu (3.) en uzun tek
+          parça içeriği (e-posta adresi) taşıdığı için biraz daha geniş.
+          Eşit dört sütunda adres satıra sığmayıp ikiye bölünüyordu.
+        */}
+        <div className="grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.2fr_1fr]">
           <nav aria-labelledby="footer-quick-links">
             <h2
               id="footer-quick-links"
