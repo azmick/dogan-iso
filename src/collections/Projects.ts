@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
 import { slugField } from '../fields/slug'
 import { previewUrl } from '../lib/adminPreview'
+import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -26,6 +27,8 @@ export const Projects: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
+  // Etkinlikler kendi sayfalarının yanı sıra ana sayfadaki şeritte de görünüyor.
+  hooks: revalidateCollectionHooks('/etkinlikler', ['/']),
   defaultSort: '-date',
   fields: [
     {

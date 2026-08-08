@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
+import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const Faq: CollectionConfig = {
   slug: 'faq',
@@ -23,6 +24,8 @@ export const Faq: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
+  // Sorular yalnızca /sss sayfasında listeleniyor.
+  hooks: revalidateCollectionHooks('/sss'),
   defaultSort: 'order',
   fields: [
     {

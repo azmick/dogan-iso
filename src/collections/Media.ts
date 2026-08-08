@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
+import { revalidateWholeSiteAfterChange, revalidateWholeSiteAfterDelete } from '../lib/revalidate'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -22,6 +23,12 @@ export const Media: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  // Bir görsel (logo, kapak, galeri) sitenin herhangi bir yerinde kullanılmış
+  // olabilir; hangisi olduğunu bilemediğimiz için tamamını tazeliyoruz.
+  hooks: {
+    afterChange: [revalidateWholeSiteAfterChange],
+    afterDelete: [revalidateWholeSiteAfterDelete],
   },
   fields: [
     {

@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
 import { slugField } from '../fields/slug'
 import { previewUrl } from '../lib/adminPreview'
+import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -26,6 +27,8 @@ export const Posts: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
+  // Haberler yalnızca kendi liste ve detay sayfalarında görünüyor.
+  hooks: revalidateCollectionHooks('/haberler'),
   defaultSort: '-publishedDate',
   fields: [
     {

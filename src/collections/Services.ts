@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
 import { slugField } from '../fields/slug'
 import { previewUrl } from '../lib/adminPreview'
+import { revalidateWholeSiteAfterChange, revalidateWholeSiteAfterDelete } from '../lib/revalidate'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -25,6 +26,12 @@ export const Services: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  // Hizmetler üst menüde ve hizmet detay sayfalarının yan panelinde de listelendiği
+  // için bir hizmet değişince sitenin tamamı tazelenmeli.
+  hooks: {
+    afterChange: [revalidateWholeSiteAfterChange],
+    afterDelete: [revalidateWholeSiteAfterDelete],
   },
   defaultSort: 'order',
   fields: [

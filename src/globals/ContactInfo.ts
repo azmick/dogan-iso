@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
+import { revalidateWholeSiteAfterGlobalChange } from '../lib/revalidate'
 
 export const ContactInfo: GlobalConfig = {
   slug: 'contact-info',
@@ -13,6 +14,10 @@ export const ContactInfo: GlobalConfig = {
   access: {
     read: anyone,
     update: authenticated,
+  },
+  // Üst bar, footer ve iletişim sayfası buradan besleniyor.
+  hooks: {
+    afterChange: [revalidateWholeSiteAfterGlobalChange],
   },
   fields: [
     {
@@ -100,8 +105,7 @@ export const ContactInfo: GlobalConfig = {
               name: 'mapEmbedUrl',
               type: 'text',
               label: 'Google Harita Adresi',
-              defaultValue:
-                'https://www.google.com/maps?q=39.9208,32.8541&hl=tr&z=14&output=embed',
+              defaultValue: 'https://www.google.com/maps?q=39.9208,32.8541&hl=tr&z=14&output=embed',
               admin: {
                 description:
                   'Google Haritalar’da konumunuzu açın → Paylaş → "Haritayı yerleştir" → çıkan kodun içindeki src="..." adresini buraya yapıştırın. Şu an temsili bir konum girilidir.',

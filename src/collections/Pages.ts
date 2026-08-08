@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
 import { slugField } from '../fields/slug'
 import { previewUrl } from '../lib/adminPreview'
+import { revalidateWholeSiteAfterChange, revalidateWholeSiteAfterDelete } from '../lib/revalidate'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -25,6 +26,12 @@ export const Pages: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  // Kurumsal sayfalar üst menüde ve footer'da da listelendiği için
+  // bir sayfa değişince sitenin tamamı tazelenmeli.
+  hooks: {
+    afterChange: [revalidateWholeSiteAfterChange],
+    afterDelete: [revalidateWholeSiteAfterDelete],
   },
   fields: [
     {

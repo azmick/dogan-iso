@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
+import { revalidateWholeSiteAfterGlobalChange } from '../lib/revalidate'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -13,6 +14,10 @@ export const SiteSettings: GlobalConfig = {
   access: {
     read: anyone,
     update: authenticated,
+  },
+  // Logo, site adı ve varsayılan SEO her sayfada kullanılıyor.
+  hooks: {
+    afterChange: [revalidateWholeSiteAfterGlobalChange],
   },
   fields: [
     {
