@@ -52,10 +52,9 @@ const HIGHLIGHTS = [
 ]
 
 const STATS = [
-  { value: '20+', label: 'Yıllık saha tecrübesi' },
-  { value: '500+', label: 'Tamamlanan denetim' },
-  { value: '9', label: 'Yönetim sistemi standardı' },
-  { value: '%98', label: 'Denetim başarı oranı' },
+  { value: '25+', label: 'Yıllık saha tecrübesi' },
+  { value: '250+', label: 'Tamamlanan denetim' },
+  { value: '4', label: 'Yönetim sistemi standardı' },
 ]
 
 export default async function HomePage() {
@@ -90,15 +89,13 @@ export default async function HomePage() {
             </p>
 
             <h2 className="section-title text-2xl leading-tight sm:text-3xl lg:text-[2rem]">
-              Firmamız Kimdir?
+              Vegado Bilişim Kimdir?
             </h2>
 
             <p className="mt-6 text-[15px] leading-relaxed text-text-muted md:text-base">
-              Kuruluşumuz, yönetim sistemi standartlarının kurulması, denetlenmesi ve
-              belgelendirilmesi alanında hizmet veren bir danışmanlık kuruluşudur. Bilgi
-              güvenliğinden kalite yönetimine, çevre performansından iş sağlığı ve güvenliğine kadar
-              geniş bir kapsamda; tarafsızlık, gizlilik ve şeffaflık ilkelerine bağlı kalarak
-              çalışırız.
+              Vegado Bilişim ISO 27001, ISO 27701, ISO 22301, ISO 9001 başta olmak üzere yönetim
+              sistemi standartlarında denetim ve danışmanlık hizmeti veren bir danışmanlık
+              kuruluşudur.
             </p>
 
             <ul className="mt-7 space-y-3.5">
@@ -173,7 +170,7 @@ export default async function HomePage() {
 
       {/* ---------------- Sayısal göstergeler ---------------- */}
       <section className="border-y border-border bg-bg py-12" aria-label="Rakamlarla firmamız">
-        <div className="container-site grid grid-cols-2 gap-8 lg:grid-cols-4">
+        <div className="container-site grid grid-cols-2 gap-8 lg:grid-cols-3">
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="text-3xl font-extrabold text-primary sm:text-4xl">{stat.value}</p>
