@@ -16,7 +16,6 @@ import { Faq } from './collections/Faq'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
-import { Projects } from './collections/Projects'
 import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { ContactInfo } from './globals/ContactInfo'
@@ -65,7 +64,7 @@ const csrf = Array.from(
 
 const plugins: Plugin[] = [
   seoPlugin({
-    collections: ['services', 'posts', 'projects', 'pages'],
+    collections: ['services', 'posts', 'pages'],
     uploadsCollection: 'media',
     tabbedUI: true,
     generateTitle: ({ doc }) => (doc?.title as string) ?? '',
@@ -73,8 +72,7 @@ const plugins: Plugin[] = [
     generateURL: ({ doc, collectionSlug }) => {
       const prefixes: Record<string, string> = {
         services: '/hizmetler',
-        posts: '/haberler',
-        projects: '/etkinlikler',
+        posts: '/blog',
         pages: '',
       }
 
@@ -103,11 +101,7 @@ const plugins: Plugin[] = [
         enabled: { create: true, delete: true, find: true, update: true },
       },
       posts: {
-        description: 'Haber / blog yazıları (başlık, slug, yayın tarihi, özet, içerik, SEO).',
-        enabled: { create: true, delete: true, find: true, update: true },
-      },
-      projects: {
-        description: 'Etkinlik ve projeler (başlık, slug, tarih, galeri, içerik).',
+        description: 'Blog yazıları (başlık, slug, yayın tarihi, özet, içerik, SEO).',
         enabled: { create: true, delete: true, find: true, update: true },
       },
       pages: {
@@ -218,7 +212,7 @@ export default buildConfig({
     meta: {
       titleSuffix: ' — Yönetim Paneli',
       description:
-        'ISO belgelendirme tanıtım sitesinin içerik yönetim paneli. Sayfalar, haberler, hizmetler ve iletişim bilgileri buradan güncellenir.',
+        'ISO belgelendirme tanıtım sitesinin içerik yönetim paneli. Sayfalar, blog yazıları, hizmetler ve iletişim bilgileri buradan güncellenir.',
     },
     // Panel açık kalırken oturumun kendiliğinden düşmesini engeller —
     // yazı yazarken oturumu kapanan editör, yazdıklarını kaybetmesin.
@@ -244,7 +238,7 @@ export default buildConfig({
     fallbackLanguage: 'tr',
     supportedLanguages: { tr, en },
   },
-  collections: [Services, Posts, Projects, Pages, Faq, Media, ContactSubmissions, Users],
+  collections: [Services, Posts, Pages, Faq, Media, ContactSubmissions, Users],
   globals: [SiteSettings, ContactInfo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

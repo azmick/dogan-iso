@@ -70,7 +70,6 @@ export interface Config {
   collections: {
     services: Service;
     posts: Post;
-    projects: Project;
     pages: Page;
     faq: Faq;
     media: Media;
@@ -86,7 +85,6 @@ export interface Config {
   collectionsSelect: {
     services: ServicesSelect<false> | ServicesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     faq: FaqSelect<false> | FaqSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -226,7 +224,7 @@ export interface Media {
    */
   alt: string;
   /**
-   * Etkinlik galerilerinde görselin altında gösterilecek açıklama. Boş bırakabilirsiniz.
+   * Görselle ilgili kısa bir not. Sayfalarda gösterilmez; kütüphanede aramayı kolaylaştırır. Boş bırakabilirsiniz.
    */
   caption?: string | null;
   updatedAt: string;
@@ -276,7 +274,7 @@ export interface Media {
   };
 }
 /**
- * Haber, duyuru ve blog yazıları. Sitedeki "Haberler" sayfasında en yeniden eskiye doğru listelenir.
+ * Blog yazıları ve duyurular. Sitedeki "Blog" sayfasında en yeniden eskiye doğru listelenir.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
@@ -284,19 +282,19 @@ export interface Media {
 export interface Post {
   id: number;
   /**
-   * Haberin ana başlığı. Kısa ve açıklayıcı olması okunma oranını artırır.
+   * Yazının ana başlığı. Kısa ve açıklayıcı olması okunma oranını artırır.
    */
   title: string;
   /**
-   * Haber kartlarında ve Google sonuçlarında görünen kısa metin. En fazla 300 karakter.
+   * Blog kartlarında ve Google sonuçlarında görünen kısa metin. En fazla 300 karakter.
    */
   excerpt?: string | null;
   /**
-   * Haber kartında ve sosyal medya paylaşımlarında kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).
+   * Blog kartında ve sosyal medya paylaşımlarında kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).
    */
   coverImage?: (number | null) | Media;
   /**
-   * Haberin tam metni. Ara başlık, liste, bağlantı ve görsel ekleyebilirsiniz.
+   * Yazının tam metni. Ara başlık, liste, bağlantı ve görsel ekleyebilirsiniz.
    */
   content?: {
     root: {
@@ -318,7 +316,7 @@ export interface Post {
    */
   slug: string;
   /**
-   * Haberin sitede görünen tarihi. Listeleme sırası bu tarihe göre yapılır.
+   * Yazının sitede görünen tarihi. Listeleme sırası bu tarihe göre yapılır.
    */
   publishedDate: string;
   meta?: {
@@ -329,67 +327,6 @@ export interface Post {
      */
     image?: (number | null) | Media;
   };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Fuar, eğitim, seminer ve proje kayıtları. Her kayıt kendi detay sayfasında fotoğraflarıyla yayınlanır.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
- */
-export interface Project {
-  id: number;
-  /**
-   * Etkinliğin adı. Kartlarda ve sayfa başlığında görünür.
-   */
-  title: string;
-  /**
-   * Etkinlik kartlarında görünen özet. En fazla 300 karakter.
-   */
-  excerpt?: string | null;
-  /**
-   * Etkinlik kartında kullanılan ana görsel. Önerilen ölçü: 1600 x 900 piksel (yatay).
-   */
-  coverImage?: (number | null) | Media;
-  /**
-   * Etkinliğin detaylı anlatımı, katılımcılar, program vb.
-   */
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Birden fazla fotoğraf seçebilirsiniz. Sürükleyerek sıralarını değiştirebilirsiniz.
-   */
-  gallery?: (number | Media)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-  };
-  /**
-   * URL adresinde görünen kısa ad. Boş bırakılırsa başlıktan otomatik üretilir.
-   */
-  slug: string;
-  /**
-   * Etkinliğin gerçekleştiği tarih. Listeleme sırası bu tarihe göre yapılır.
-   */
-  date: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -597,24 +534,6 @@ export interface PayloadMcpApiKey {
      */
     delete?: boolean | null;
   };
-  projects?: {
-    /**
-     * Allow clients to find projects.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to create projects.
-     */
-    create?: boolean | null;
-    /**
-     * Allow clients to update projects.
-     */
-    update?: boolean | null;
-    /**
-     * Allow clients to delete projects.
-     */
-    delete?: boolean | null;
-  };
   pages?: {
     /**
      * Allow clients to find pages.
@@ -725,10 +644,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'projects';
-        value: number | Project;
       } | null)
     | ({
         relationTo: 'pages';
@@ -845,28 +760,6 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects_select".
- */
-export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  excerpt?: T;
-  coverImage?: T;
-  content?: T;
-  gallery?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  slug?: T;
-  date?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1019,14 +912,6 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
         delete?: T;
       };
   posts?:
-    | T
-    | {
-        find?: T;
-        create?: T;
-        update?: T;
-        delete?: T;
-      };
-  projects?:
     | T
     | {
         find?: T;

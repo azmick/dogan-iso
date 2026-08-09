@@ -66,7 +66,7 @@ Geliştirmede veritabanı şeması otomatik güncellenir (`push: true`).
 pnpm seed
 ```
 
-Yönetici kullanıcı, 9 hizmet, 4 kurumsal/yasal sayfa, 6 haber, 4 etkinlik ve 8 SSS kaydı ekler.
+Yönetici kullanıcı, 9 hizmet, 4 kurumsal/yasal sayfa, 6 blog yazısı ve 8 SSS kaydı ekler.
 Dolu koleksiyonlara dokunmaz, tekrar tekrar çalıştırılabilir.
 
 Varsayılan yönetici bilgileri (`SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` ile değiştirilebilir):
@@ -100,8 +100,8 @@ src/
 ├── app/
 │   ├── (frontend)/    Site sayfaları, sitemap.ts, robots.ts, styles.css
 │   └── (payload)/     Payload yönetim paneli ve REST/GraphQL uçları
-├── collections/       services, posts, projects, pages, faq, media, contact-submissions, users
-├── components/        Header, Footer, HeroSlider, kartlar, form, lightbox vb.
+├── collections/       services, posts (Blog), pages, faq, media, contact-submissions, users
+├── components/        Header, Footer, HeroSlider, kartlar, form vb.
 ├── fields/            Türkçe-uyumlu slug alanı
 ├── globals/           site-settings, contact-info
 ├── lib/               Payload veri erişimi, SEO, medya ve biçimlendirme yardımcıları
@@ -113,7 +113,7 @@ src/
 
 Panelde tüm içerik türleri Türkçe etiketlerle listelenir:
 
-- **İçerik:** Hizmetler, Haberler, Etkinlikler, Sayfalar, SSS, Medya
+- **İçerik:** Hizmetler, Blog, Sayfalar, SSS, Medya
 - **Ayarlar:** Site Ayarları (logo, favicon, varsayılan SEO), İletişim Bilgileri (adres, telefon,
   WhatsApp, e-posta, harita, sosyal medya, faydalı linkler)
 - **Yönetim:** İletişim Formu Kayıtları, Kullanıcılar
@@ -140,7 +140,7 @@ Hangi koleksiyon/global'in hangi işlemlere açılabileceği ise `payload.config
 
 | Kapsam | İşlemler |
 | --- | --- |
-| Hizmetler, Haberler, Etkinlikler, Sayfalar, SSS | listele, oluştur, güncelle, sil |
+| Hizmetler, Blog, Sayfalar, SSS | listele, oluştur, güncelle, sil |
 | Medya | listele, güncelle (yükleme yalnızca panelden) |
 | İletişim Formu Kayıtları | listele (salt okunur) |
 | Site Ayarları, İletişim Bilgileri | listele, güncelle |

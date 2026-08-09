@@ -8,7 +8,6 @@ import {
   getPages,
   getPayloadClient,
   getPosts,
-  getProjects,
   getServices,
   getSiteSettings,
 } from '@/lib/payload'
@@ -25,7 +24,7 @@ import { ROUTES } from '@/lib/site'
  * `revalidate.ts` bu iki adresi de tazeler.
  */
 
-/** llms.txt'te listelenecek en fazla haber/etkinlik sayısı (dosya şişmesin). */
+/** llms.txt'te listelenecek en fazla blog yazısı sayısı (dosya şişmesin). */
 const LIST_LIMIT = 50
 
 /* ------------------------------------------------------------------ */
@@ -88,12 +87,11 @@ const latestUpdate = (...groups: Timestamped[][]): string => {
 /* ------------------------------------------------------------------ */
 
 export const buildLlmsTxt = async (): Promise<string> => {
-  const [settings, contact, services, postsResult, projects, pages, faqs] = await Promise.all([
+  const [settings, contact, services, postsResult, pages, faqs] = await Promise.all([
     getSiteSettings(),
     getContactInfo(),
     getServices(100),
     getPosts(1, LIST_LIMIT),
-    getProjects(LIST_LIMIT),
     getPages(),
     getFaqs(),
   ])
@@ -129,7 +127,7 @@ export const buildLlmsTxt = async (): Promise<string> => {
     ['Telefon', contact?.phone],
     ['E-posta', contact?.email],
     ['Çalışma saatleri', contact?.workingHours],
-    ['Son içerik güncellemesi', latestUpdate(services, posts, projects, pages, faqs)],
+    ['Son içerik güncellemesi', latestUpdate(services, posts, pages, faqs)],
     ['Tüm sayfaların tam metni', absoluteUrl('/llms-full.txt')],
     ['Site haritası', absoluteUrl('/sitemap.xml')],
   ]
@@ -196,44 +194,22 @@ export const buildLlmsTxt = async (): Promise<string> => {
     ),
   )
 
-  /* -------------------- Haberler -------------------- */
+  /* -------------------- Blog -------------------- */
   lines.push(
-    ...linkSection('Haberler', [
+    ...linkSection('Blog', [
       ...(posts.length
         ? [
             {
-              title: 'Haberler',
-              path: ROUTES.posts,
+              title: 'Blog',
+              path: ROUTES.blog,
               description: 'Sektörel gelişmeler, mevzuat değişiklikleri ve kurumsal duyurular.',
             },
           ]
         : []),
       ...posts.map((post) => ({
         title: post.title,
-        path: `${ROUTES.posts}/${post.slug}`,
+        path: `${ROUTES.blog}/${post.slug}`,
         description: [toISODate(post.publishedDate), summarize(post.excerpt, post.content)]
-          .filter(Boolean)
-          .join(' — '),
-      })),
-    ]),
-  )
-
-  /* -------------------- Etkinlikler -------------------- */
-  lines.push(
-    ...linkSection('Etkinlikler ve Projeler', [
-      ...(projects.length
-        ? [
-            {
-              title: 'Etkinliklerimiz',
-              path: ROUTES.projects,
-              description: 'Katılınan fuarlar, düzenlenen eğitimler ve tamamlanan saha çalışmaları.',
-            },
-          ]
-        : []),
-      ...projects.map((project) => ({
-        title: project.title,
-        path: `${ROUTES.projects}/${project.slug}`,
-        description: [toISODate(project.date), summarize(project.excerpt, project.content)]
           .filter(Boolean)
           .join(' — '),
       })),
@@ -265,17 +241,15 @@ type Document = {
 export const buildLlmsFullTxt = async (): Promise<string> => {
   const payload = await getPayloadClient()
 
-  const [editorConfig, settings, contact, services, postsResult, projects, pages, faqs] =
-    await Promise.all([
-      editorConfigFactory.default({ config: payload.config }),
-      getSiteSettings(),
-      getContactInfo(),
-      getServices(100),
-      getPosts(1, LIST_LIMIT),
-      getProjects(LIST_LIMIT),
-      getPages(),
-      getFaqs(),
-    ])
+  const [editorConfig, settings, contact, services, postsResult, pages, faqs] = await Promise.all([
+    editorConfigFactory.default({ config: payload.config }),
+    getSiteSettings(),
+    getContactInfo(),
+    getServices(100),
+    getPosts(1, LIST_LIMIT),
+    getPages(),
+    getFaqs(),
+  ])
 
   const posts = postsResult.docs
   const siteName = settings?.siteName || 'ISO Belgelendirme'
@@ -317,7 +291,7 @@ export const buildLlmsFullTxt = async (): Promise<string> => {
     `- Dil: Türkçe (tr-TR)`,
   ]
 
-  const updated = latestUpdate(services, posts, projects, pages, faqs)
+  const updated = latestUpdate(services, posts, pages, faqs)
 
   if (updated) lines.push(`- Son içerik güncellemesi: ${updated}`)
   if (contact?.phone) lines.push(`- Telefon: ${contact.phone}`)
@@ -368,35 +342,18 @@ export const buildLlmsFullTxt = async (): Promise<string> => {
     })
   }
 
-  /* -------------------- Haberler -------------------- */
+  /* -------------------- Blog -------------------- */
   if (posts.length) {
-    lines.push('', '## Haberler')
+    lines.push('', '## Blog')
 
     posts.forEach((post) => {
       lines.push(
         ...documentBlock({
           title: post.title,
-          path: `${ROUTES.posts}/${post.slug}`,
+          path: `${ROUTES.blog}/${post.slug}`,
           meta: [post.publishedDate ? `Yayın tarihi: ${toISODate(post.publishedDate)}` : null],
           excerpt: post.excerpt,
           content: post.content,
-        }),
-      )
-    })
-  }
-
-  /* -------------------- Etkinlikler -------------------- */
-  if (projects.length) {
-    lines.push('', '## Etkinlikler ve Projeler')
-
-    projects.forEach((project) => {
-      lines.push(
-        ...documentBlock({
-          title: project.title,
-          path: `${ROUTES.projects}/${project.slug}`,
-          meta: [project.date ? `Tarih: ${toISODate(project.date)}` : null],
-          excerpt: project.excerpt,
-          content: project.content,
         }),
       )
     })

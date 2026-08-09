@@ -76,27 +76,6 @@ const ServiceIcon = () => (
   </svg>
 )
 
-const EventIcon = () => (
-  <svg {...iconProps}>
-    <rect
-      x="3.5"
-      y="5"
-      width="17"
-      height="15"
-      rx="2"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M3.5 10h17M8 3.5V6M16 3.5V6"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-    />
-  </svg>
-)
-
 const MediaIcon = () => (
   <svg {...iconProps}>
     <rect
@@ -180,11 +159,10 @@ export const AdminDashboard = async ({ payload, user }: DashboardProps) => {
   const admin = payload.config.routes.admin || '/admin'
   const link = (path: string) => `${admin}${path}`
 
-  const [services, posts, projects, pages, faq, media, submissions, latestMessages] =
+  const [services, posts, pages, faq, media, submissions, latestMessages] =
     await Promise.all([
       payload.count({ collection: 'services' }),
       payload.count({ collection: 'posts' }),
-      payload.count({ collection: 'projects' }),
       payload.count({ collection: 'pages' }),
       payload.count({ collection: 'faq' }),
       payload.count({ collection: 'media' }),
@@ -202,20 +180,14 @@ export const AdminDashboard = async ({ payload, user }: DashboardProps) => {
     {
       href: link('/collections/posts/create'),
       icon: <NewsIcon />,
-      label: 'Yeni Haber Ekle',
-      hint: 'Duyuru veya blog yazısı yayınlayın.',
+      label: 'Yeni Blog Yazısı Ekle',
+      hint: 'Duyuru veya bilgilendirme yazısı yayınlayın.',
     },
     {
       href: link('/collections/services/create'),
       icon: <ServiceIcon />,
       label: 'Yeni Hizmet Ekle',
       hint: 'Belgelendirme / danışmanlık hizmeti tanımlayın.',
-    },
-    {
-      href: link('/collections/projects/create'),
-      icon: <EventIcon />,
-      label: 'Yeni Etkinlik Ekle',
-      hint: 'Proje, fuar veya eğitim kaydı oluşturun.',
     },
     {
       href: link('/collections/media/create'),
@@ -227,8 +199,7 @@ export const AdminDashboard = async ({ payload, user }: DashboardProps) => {
 
   const stats = [
     { href: link('/collections/services'), value: services.totalDocs, label: 'Hizmet' },
-    { href: link('/collections/posts'), value: posts.totalDocs, label: 'Haber' },
-    { href: link('/collections/projects'), value: projects.totalDocs, label: 'Etkinlik' },
+    { href: link('/collections/posts'), value: posts.totalDocs, label: 'Blog Yazısı' },
     { href: link('/collections/pages'), value: pages.totalDocs, label: 'Sayfa' },
     { href: link('/collections/faq'), value: faq.totalDocs, label: 'S.S.S.' },
     { href: link('/collections/media'), value: media.totalDocs, label: 'Görsel / Dosya' },

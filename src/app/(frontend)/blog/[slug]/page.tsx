@@ -31,12 +31,12 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const post = await getPostBySlug(slug)
 
-  if (!post) return { title: 'Haber bulunamadı' }
+  if (!post) return { title: 'Yazı bulunamadı' }
 
   return buildMetadata({
     title: post.title,
     description: post.excerpt || richTextToExcerpt(post.content),
-    path: `${ROUTES.posts}/${post.slug}`,
+    path: `${ROUTES.blog}/${post.slug}`,
     image: post.coverImage,
     type: 'article',
     publishedTime: post.publishedDate,
@@ -54,7 +54,7 @@ export default async function PostDetailPage({ params }: PageProps) {
 
   if (!post) notFound()
 
-  const url = absoluteUrl(`${ROUTES.posts}/${post.slug}`)
+  const url = absoluteUrl(`${ROUTES.blog}/${post.slug}`)
   const description = post.excerpt || richTextToExcerpt(post.content)
   const related = latest.docs.filter((item) => item.id !== post.id).slice(0, 3)
 
@@ -88,7 +88,7 @@ export default async function PostDetailPage({ params }: PageProps) {
         image={post.coverImage}
       />
 
-      <Breadcrumbs items={[{ label: 'Haberler', href: ROUTES.posts }, { label: post.title }]} />
+      <Breadcrumbs items={[{ label: 'Blog', href: ROUTES.blog }, { label: post.title }]} />
 
       <div className="container-site py-12 md:py-16">
         <article className="mx-auto max-w-3xl">
@@ -114,7 +114,7 @@ export default async function PostDetailPage({ params }: PageProps) {
       </div>
 
       {related.length ? (
-        <Section soft title="Diğer Haberler">
+        <Section soft title="Diğer Yazılar">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((item) => (
               <PostCard key={item.id} post={item} />

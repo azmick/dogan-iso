@@ -4,7 +4,7 @@ Bu dosya, projenin kalıcı talimat setidir. Claude Code her oturumda buna uymal
 
 1. Proje Amacı
 
-ISO sertifika denetimi yapıp belge veren bir firma için kurumsal tanıtım sitesi kuruyoruz. Sitenin iskelet/yapı olarak referansı, aşağıda "Site Haritası" ve "Sayfa İskeletleri" bölümlerinde tarif edilen kurumsal danışmanlık sitesi düzenidir (klasik: üst bar + logo + açılır menülü navigasyon, hero slider, hizmet kartları, hakkımızda, projeler/etkinlikler, blog, iletişim, footer).
+ISO sertifika denetimi yapıp belge veren bir firma için kurumsal tanıtım sitesi kuruyoruz. Sitenin iskelet/yapı olarak referansı, aşağıda "Site Haritası" ve "Sayfa İskeletleri" bölümlerinde tarif edilen kurumsal danışmanlık sitesi düzenidir (klasik: üst bar + logo + açılır menülü navigasyon, hero slider, hizmet kartları, hakkımızda, blog, iletişim, footer).
 
 Önemli çerçeve:
 
@@ -111,8 +111,7 @@ KVKK Uyum Danışmanlığı
 KVKK Teknik Gereksinim Çözümleri
 Eğitim ve Seminer Hizmetleri
 SGK Teşvik Danışmanlığı (Bir de opsiyonel /hizmetler liste sayfası yap.)
-Etkinlikler / Projeler — liste /etkinlikler, detay /etkinlikler/[slug]
-Haberler / Blog — liste /haberler, detay /haberler/[slug]
+Blog — liste /blog, detay /blog/[slug]
 İletişim — /iletisim
 Kurumsal / Yasal sayfalar (statik içerik, pages koleksiyonundan):
 /kvkk-aydinlatma-metni
@@ -122,8 +121,8 @@ Kurumsal / Yasal sayfalar (statik içerik, pages koleksiyonundan):
 SSS — /sss
 6. Sayfa İskeletleri (bölüm bölüm)
 6.1 Header (tüm sayfalarda, sabit/sticky)
-Üst bar (ince şerit): solda adres + telefon (placeholder); sağda "Haberler", "İletişim" linkleri + e-posta + sosyal medya ikonları (Facebook, X, LinkedIn, Instagram).
-Ana bar: solda logo (placeholder); sağda yatay menü: Ana Sayfa · Kurumsal ▾ · Hizmetlerimiz ▾ · Etkinliklerimiz · İletişim
+Üst bar (ince şerit): solda adres + telefon (placeholder); sağda "Blog", "İletişim" linkleri + e-posta + sosyal medya ikonları (Facebook, X, LinkedIn, Instagram).
+Ana bar: solda logo (placeholder); sağda yatay menü: Ana Sayfa · Kurumsal ▾ · Hizmetlerimiz ▾ · Blog · İletişim
 belirgin bir "İletişim / Teklif Al" butonu (accent renkte).
 Kurumsal ▾ alt menü: Hakkımızda, KVKK Aydınlatma Metni, KVKK Başvuru Formu, Çerez Politikası, KVKK Rehberleri.
 Hizmetlerimiz ▾ alt menü: Bölüm 5'teki 9 hizmet.
@@ -131,7 +130,7 @@ Mobilde: hamburger menü, açılır panel, alt menüler açılabilir (accordion)
 6.2 Footer (tüm sayfalarda)
 Üst kısım: logo (açık/ters versiyon) + sosyal medya ikonları.
 Sütunlar:
-Hızlı Linkler: Ana Sayfa, Hakkımızda, Hizmetlerimiz, Haberler, Etkinliklerimiz, SSS, İletişim
+Hızlı Linkler: Ana Sayfa, Hakkımızda, Hizmetlerimiz, Blog, SSS, İletişim
 İletişim: adres, telefon, e-posta (placeholder)
 Faydalı Linkler: ilgili resmî kaynaklara dış bağlantılar (placeholder linkler)
 Alt şerit: telif satırı ("© [YIL] [Firma Adı]. Tüm hakları saklıdır.").
@@ -141,7 +140,7 @@ Hero slider — tam genişlik, 3–4 slayt. Her slaytta: arkaplan görseli (koyu
 Hakkımızda özeti — iki sütun: solda görsel, sağda başlık ("Firmamız Kimdir?")
 kısa tanıtım paragrafı + "Hakkımızda" butonu.
 Hizmetlerimiz — başlık + hizmet kartları grid'i (Payload services'ten çekilir). Her kart: görsel, başlık, 1–2 satır açıklama, "Devamı →" linki (detay sayfasına). Mobil 1, tablet 2, masaüstü 3 sütun.
-Etkinlikler / Projeler — başlık + proje kartları (görsel + başlık) yatay şerit/carousel.
+Sayısal göstergeler şeridi.
 CTA şeridi — koyu mavi zeminli, "Teklif alın / bize ulaşın" çağrısı + buton.
 6.4 Hakkımızda (/hakkimizda)
 Breadcrumb (BreadcrumbList schema).
@@ -155,14 +154,14 @@ Yan panel (sidebar): "Hizmetlerimiz" listesi (diğer hizmetlere linkler) + bir "
 Alt CTA: teklif/iletişim çağrısı.
 generateMetadata ile SEO; Service + BreadcrumbList JSON-LD.
 (/hizmetler liste sayfası: tüm hizmet kartları grid.)
-6.6 Etkinlikler / Projeler
-Liste (/etkinlikler): proje kartları grid (görsel + başlık + kısa açıklama + link).
-Detay (/etkinlikler/[slug]): breadcrumb, H1, görsel(ler)/galeri, içerik metni, tarih.
+6.6 Etkinlikler / Projeler — KALDIRILDI
+Müşteri kararı: Etkinlikler/Projeler bölümü tamamen kaldırıldı, yeniden eklenmeyecek. /etkinlikler sayfaları, ana sayfadaki şerit, projects koleksiyonu ve ProjectCard/Lightbox bileşenleri silindi. Eski adresler 301 ile /blog'a yönlendiriliyor (next.config.ts).
 6.7 Görseller — ayrı medya/galeri sayfası YOK
-Müşteri kararı: bağımsız bir /galeri (Medya) sayfası kaldırıldı, yeniden eklenmeyecek. Görseller ilgili sayfaların içinde yaşar: etkinlik detayında lightbox'lı foto galeri (LightboxGallery), diğer sayfalarda kapak/içerik görselleri. Panelin Medya Kütüphanesi koleksiyonu (media) aynen kalır — tüm görseller oradan yüklenir.
-6.8 Haberler / Blog
-Liste (/haberler): haber kartları (görsel, başlık, tarih, özet, "Devamı →"). Sayfalama.
-Detay (/haberler/[slug]): breadcrumb, H1, tarih, kapak görseli, içerik, paylaş butonları. Article + BreadcrumbList JSON-LD.
+Müşteri kararı: bağımsız bir /galeri (Medya) sayfası kaldırıldı, yeniden eklenmeyecek. Görseller ilgili sayfaların içinde yaşar: kapak ve içerik görselleri. Panelin Medya Kütüphanesi koleksiyonu (media) aynen kalır — tüm görseller oradan yüklenir.
+6.8 Blog
+Müşteri kararı: "Haberler" bölümü Blog'a dönüştürüldü. Payload koleksiyonunun teknik adı posts olarak kaldı (veri korunsun diye), panelde ve sitede "Blog" olarak geçiyor. /haberler adresleri 301 ile /blog'a yönlendiriliyor.
+Liste (/blog): yazı kartları (görsel, başlık, tarih, özet, "Devamı →"). Sayfalama.
+Detay (/blog/[slug]): breadcrumb, H1, tarih, kapak görseli, içerik, paylaş butonları. Article + BreadcrumbList JSON-LD.
 6.9 İletişim (/iletisim)
 Breadcrumb + H1.
 İki sütun: solda iletişim bilgileri (adres, telefon, WhatsApp, e-posta, çalışma saatleri — placeholder) + sosyal medya; sağda iletişim formu.
@@ -183,8 +182,7 @@ Collections:
 
 media (upload) — Vercel Blob'a yüklenir; alt alanı zorunlu (SEO/erişilebilirlik).
 services (Hizmetler): title, slug, excerpt (kısa açıklama), coverImage (→ media), content (richText), order (sıralama), seo (plugin alanları).
-posts (Haberler): title, slug, publishedDate, coverImage, excerpt, content (richText), seo.
-projects (Etkinlikler): title, slug, coverImage, gallery (media dizisi), content (richText), date.
+posts (panelde "Blog"): title, slug, publishedDate, coverImage, excerpt, content (richText), seo.
 pages (Statik/Yasal): title, slug, content (richText), seo.
 faq (SSS): question, answer (richText), order.
 contactSubmissions (İletişim formu kayıtları): name, email, phone, subject, message, createdAt. (Panelden okunur.)
@@ -204,7 +202,7 @@ Payload + Next.js kurulumu (Postgres/Neon), .env, ilk admin, panelin açılması
 Collections + Globals'ı tanımla; birkaç temsili kayıt gir.
 Global düzen: Header + Footer + Tailwind + renk token'ları + tipografi.
 Ana sayfa (bölümleriyle), veriyi Payload'dan çekerek.
-Hizmet detay (dinamik) + liste; sonra Haberler, Etkinlikler.
+Hizmet detay (dinamik) + liste; sonra Blog.
 İletişim (form + harita + e-posta) + yasal sayfalar + SSS + çerez banner'ı.
 SEO katmanı: metadata, sitemap.ts, robots.ts, JSON-LD, OpenGraph.
 Vercel Blob yapılandırması + deploy hazırlığı (migration, build ayarları).

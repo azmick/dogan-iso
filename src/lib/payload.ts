@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import type { ContactInfo, Faq, Page, Post, Project, Service, SiteSetting } from '@/payload-types'
+import type { ContactInfo, Faq, Page, Post, Service, SiteSetting } from '@/payload-types'
 
 /** Payload Local API istemcisi (istek başına tekilleştirilmiş). */
 export const getPayloadClient = cache(async () => getPayload({ config }))
@@ -68,7 +68,7 @@ export const getServiceBySlug = cache(async (slug: string): Promise<Service | nu
 })
 
 /* ------------------------------------------------------------------ */
-/* Haberler                                                            */
+/* Blog                                                                */
 /* ------------------------------------------------------------------ */
 
 export const getPosts = cache(async (page = 1, limit = 9) => {
@@ -87,34 +87,6 @@ export const getPostBySlug = cache(async (slug: string): Promise<Post | null> =>
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'posts',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 1,
-  })
-
-  return docs[0] ?? null
-})
-
-/* ------------------------------------------------------------------ */
-/* Etkinlikler / Projeler                                              */
-/* ------------------------------------------------------------------ */
-
-export const getProjects = cache(async (limit = 100): Promise<Project[]> => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'projects',
-    limit,
-    depth: 1,
-    sort: '-date',
-  })
-
-  return docs
-})
-
-export const getProjectBySlug = cache(async (slug: string): Promise<Project | null> => {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'projects',
     where: { slug: { equals: slug } },
     limit: 1,
     depth: 1,

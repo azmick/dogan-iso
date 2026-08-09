@@ -6,10 +6,11 @@ import { previewUrl } from '../lib/adminPreview'
 import { revalidateCollectionHooks } from '../lib/revalidate'
 
 export const Posts: CollectionConfig = {
+  // Koleksiyonun teknik adı 'posts' kalıyor; sitede ve panelde "Blog" olarak geçer.
   slug: 'posts',
   labels: {
-    singular: 'Haber',
-    plural: 'Haberler',
+    singular: 'Blog Yazısı',
+    plural: 'Blog',
   },
   admin: {
     group: 'İçerik',
@@ -17,8 +18,8 @@ export const Posts: CollectionConfig = {
     defaultColumns: ['title', 'publishedDate', 'updatedAt'],
     listSearchableFields: ['title', 'excerpt', 'slug'],
     description:
-      'Haber, duyuru ve blog yazıları. Sitedeki "Haberler" sayfasında en yeniden eskiye doğru listelenir.',
-    preview: previewUrl('/haberler'),
+      'Blog yazıları ve duyurular. Sitedeki "Blog" sayfasında en yeniden eskiye doğru listelenir.',
+    preview: previewUrl('/blog'),
     pagination: { defaultLimit: 25 },
   },
   access: {
@@ -27,8 +28,8 @@ export const Posts: CollectionConfig = {
     update: authenticated,
     delete: authenticated,
   },
-  // Haberler yalnızca kendi liste ve detay sayfalarında görünüyor.
-  hooks: revalidateCollectionHooks('/haberler'),
+  // Blog yazıları yalnızca kendi liste ve detay sayfalarında görünüyor.
+  hooks: revalidateCollectionHooks('/blog'),
   defaultSort: '-publishedDate',
   fields: [
     {
@@ -38,7 +39,7 @@ export const Posts: CollectionConfig = {
       required: true,
       admin: {
         placeholder: 'Örn: ISO 27001 denetimlerinde 2025 güncellemeleri',
-        description: 'Haberin ana başlığı. Kısa ve açıklayıcı olması okunma oranını artırır.',
+        description: 'Yazının ana başlığı. Kısa ve açıklayıcı olması okunma oranını artırır.',
       },
     },
     {
@@ -47,9 +48,9 @@ export const Posts: CollectionConfig = {
       label: 'Özet',
       maxLength: 300,
       admin: {
-        placeholder: 'Haberin ne anlattığını iki üç cümleyle özetleyin.',
+        placeholder: 'Yazının ne anlattığını iki üç cümleyle özetleyin.',
         description:
-          'Haber kartlarında ve Google sonuçlarında görünen kısa metin. En fazla 300 karakter.',
+          'Blog kartlarında ve Google sonuçlarında görünen kısa metin. En fazla 300 karakter.',
       },
     },
     {
@@ -59,15 +60,15 @@ export const Posts: CollectionConfig = {
       label: 'Kapak Görseli',
       admin: {
         description:
-          'Haber kartında ve sosyal medya paylaşımlarında kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).',
+          'Blog kartında ve sosyal medya paylaşımlarında kullanılır. Önerilen ölçü: 1600 x 900 piksel (yatay).',
       },
     },
     {
       name: 'content',
       type: 'richText',
-      label: 'Haber Metni',
+      label: 'Yazı Metni',
       admin: {
-        description: 'Haberin tam metni. Ara başlık, liste, bağlantı ve görsel ekleyebilirsiniz.',
+        description: 'Yazının tam metni. Ara başlık, liste, bağlantı ve görsel ekleyebilirsiniz.',
       },
     },
     slugField(),
@@ -80,7 +81,7 @@ export const Posts: CollectionConfig = {
       admin: {
         position: 'sidebar',
         date: { pickerAppearance: 'dayOnly', displayFormat: 'dd.MM.yyyy' },
-        description: 'Haberin sitede görünen tarihi. Listeleme sırası bu tarihe göre yapılır.',
+        description: 'Yazının sitede görünen tarihi. Listeleme sırası bu tarihe göre yapılır.',
       },
     },
   ],

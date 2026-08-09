@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@/components/Icons'
 type PaginationProps = {
   currentPage: number
   totalPages: number
-  /** Sayfa numarası eklenecek temel yol, ör. /haberler */
+  /** Sayfa numarası eklenecek temel yol, ör. /blog */
   basePath: string
   /** Sayfa numarası sorgu parametresi. */
   paramName?: string

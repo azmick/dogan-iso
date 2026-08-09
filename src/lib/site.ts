@@ -14,8 +14,7 @@ export const ROUTES = {
   home: '/',
   about: '/hakkimizda',
   services: '/hizmetler',
-  projects: '/etkinlikler',
-  posts: '/haberler',
+  blog: '/blog',
   contact: '/iletisim',
   faq: '/sss',
 } as const
@@ -24,8 +23,7 @@ export const STATIC_PAGE_TITLES: Record<string, string> = {
   [ROUTES.home]: 'Ana Sayfa',
   [ROUTES.about]: 'Hakkımızda',
   [ROUTES.services]: 'Hizmetlerimiz',
-  [ROUTES.projects]: 'Etkinliklerimiz',
-  [ROUTES.posts]: 'Haberler',
+  [ROUTES.blog]: 'Blog',
   [ROUTES.contact]: 'İletişim',
   [ROUTES.faq]: 'Sıkça Sorulan Sorular',
 }

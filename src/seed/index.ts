@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 
 import { slugify } from '../fields/slug'
-import { faqs, pages, posts, projects, services, usefulLinks } from './content'
+import { faqs, pages, posts, services, usefulLinks } from './content'
 
 /**
  * Temsili içerikleri yükler.
@@ -99,7 +99,7 @@ const seed = async () => {
     console.log('  • Sayfalar zaten var, atlandı')
   }
 
-  /* ---------------- Haberler ---------------- */
+  /* ---------------- Blog ---------------- */
   const { totalDocs: postCount } = await payload.find({
     collection: 'posts',
     limit: 0,
@@ -119,34 +119,9 @@ const seed = async () => {
         },
       })
     }
-    console.log(`  ✓ ${posts.length} haber eklendi`)
+    console.log(`  ✓ ${posts.length} blog yazısı eklendi`)
   } else {
-    console.log('  • Haberler zaten var, atlandı')
-  }
-
-  /* ---------------- Etkinlikler ---------------- */
-  const { totalDocs: projectCount } = await payload.find({
-    collection: 'projects',
-    limit: 0,
-    depth: 0,
-  })
-
-  if (projectCount === 0) {
-    for (const project of projects) {
-      await payload.create({
-        collection: 'projects',
-        data: {
-          title: project.title,
-          slug: slugify(project.title),
-          excerpt: project.excerpt,
-          date: daysAgoToISO(project.daysAgo),
-          content: project.content as never,
-        },
-      })
-    }
-    console.log(`  ✓ ${projects.length} etkinlik eklendi`)
-  } else {
-    console.log('  • Etkinlikler zaten var, atlandı')
+    console.log('  • Blog yazıları zaten var, atlandı')
   }
 
   /* ---------------- SSS ---------------- */

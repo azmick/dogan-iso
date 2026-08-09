@@ -11,8 +11,7 @@ const QUICK_LINKS = [
   { label: 'Ana Sayfa', href: ROUTES.home },
   { label: 'Hakkımızda', href: ROUTES.about },
   { label: 'Hizmetlerimiz', href: ROUTES.services },
-  { label: 'Haberler', href: ROUTES.posts },
-  { label: 'Etkinliklerimiz', href: ROUTES.projects },
+  { label: 'Blog', href: ROUTES.blog },
   { label: 'Sıkça Sorulan Sorular', href: ROUTES.faq },
   { label: 'İletişim', href: ROUTES.contact },
 ]

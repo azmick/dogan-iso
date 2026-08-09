@@ -20,7 +20,6 @@ const LABEL = process.env.MCP_KEY_LABEL || 'Claude Code'
 const capabilities = {
   services: { create: true, delete: true, find: true, update: true },
   posts: { create: true, delete: true, find: true, update: true },
-  projects: { create: true, delete: true, find: true, update: true },
   pages: { create: true, delete: true, find: true, update: true },
   faq: { create: true, delete: true, find: true, update: true },
   media: { find: true, update: true },

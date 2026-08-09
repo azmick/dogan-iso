@@ -20,12 +20,37 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Medya/galeri sayfası kaldırıldı; görseller artık ilgili sayfaların içinde.
-  // Dışarıda kalmış eski bağlantılar 404 yerine etkinliklere gitsin.
+  /**
+   * Kaldırılan adreslerin kalıcı (301) karşılıkları — arama motorlarındaki
+   * ve dışarıdaki eski bağlantılar 404 vermesin, sıralama yeni adrese geçsin.
+   *
+   * - /haberler → /blog : Haberler bölümü Blog olarak devam ediyor (içerik aynı).
+   * - /etkinlikler, /galeri → /blog : bu bölümler kaldırıldı; en yakın karşılık blog.
+   */
   redirects: async () => [
     {
+      source: '/haberler',
+      destination: '/blog',
+      permanent: true,
+    },
+    {
+      source: '/haberler/:slug',
+      destination: '/blog/:slug',
+      permanent: true,
+    },
+    {
+      source: '/etkinlikler',
+      destination: '/blog',
+      permanent: true,
+    },
+    {
+      source: '/etkinlikler/:slug',
+      destination: '/blog',
+      permanent: true,
+    },
+    {
       source: '/galeri',
-      destination: '/etkinlikler',
+      destination: '/blog',
       permanent: true,
     },
   ],

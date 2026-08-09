@@ -12,14 +12,14 @@ type PostCardProps = {
 }
 
 export const PostCard = ({ post, priority = false }: PostCardProps) => {
-  const href = `${ROUTES.posts}/${post.slug}`
+  const href = `${ROUTES.blog}/${post.slug}`
 
   return (
     <article className="card group flex flex-col overflow-hidden">
       <Link href={href} tabIndex={-1} aria-hidden className="block">
         <CardImage
           image={post.coverImage}
-          fallbackLabel="Haber"
+          fallbackLabel="Blog"
           priority={priority}
           aspect="aspect-[16/10]"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

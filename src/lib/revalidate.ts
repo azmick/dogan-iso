@@ -73,7 +73,7 @@ export const revalidateWholeSiteAfterGlobalChange: GlobalAfterChangeHook = ({ do
 /**
  * Yalnızca kendi liste ve detay sayfalarında görünen koleksiyonlar için hook üretir.
  *
- * @param basePath   Liste sayfasının adresi (ör. '/haberler').
+ * @param basePath   Liste sayfasının adresi (ör. '/blog').
  * @param extraPaths Kaydın ayrıca göründüğü sabit sayfalar (ör. ana sayfa).
  */
 export const revalidateCollectionHooks = (basePath: string, extraPaths: string[] = []) => {

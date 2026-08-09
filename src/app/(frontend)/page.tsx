@@ -4,10 +4,9 @@ import { CardImage } from '@/components/CardImage'
 import { CtaBand } from '@/components/CtaBand'
 import { HeroSlider, type HeroSlide } from '@/components/HeroSlider'
 import { ArrowRightIcon, CheckIcon } from '@/components/Icons'
-import { ProjectCard } from '@/components/ProjectCard'
 import { Section } from '@/components/Section'
 import { ServiceCard } from '@/components/ServiceCard'
-import { getProjects, getServices } from '@/lib/payload'
+import { getServices } from '@/lib/payload'
 import { ROUTES } from '@/lib/site'
 
 export const revalidate = 300
@@ -58,7 +57,7 @@ const STATS = [
 ]
 
 export default async function HomePage() {
-  const [services, projects] = await Promise.all([getServices(6), getProjects(6)])
+  const services = await getServices(6)
 
   return (
     <>
@@ -142,31 +141,6 @@ export default async function HomePage() {
           </p>
         )}
       </Section>
-
-      {/* ---------------- Etkinlikler / Projeler ---------------- */}
-      {projects.length ? (
-        <Section
-          soft
-          eyebrow="Sahadan"
-          title="Etkinlikler ve Projeler"
-          description="Katıldığımız fuarlar, düzenlediğimiz eğitimler ve tamamladığımız saha çalışmalarından bir seçki."
-          action={
-            <Link href={ROUTES.projects} className="btn btn-outline">
-              Tümünü Gör
-              <ArrowRightIcon />
-            </Link>
-          }
-        >
-          {/* Mobilde yatay kaydırmalı şerit, masaüstünde grid */}
-          <ul className="-mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-3">
-            {projects.map((project) => (
-              <li key={project.id} className="w-[78vw] shrink-0 snap-start sm:w-[52vw] md:w-auto">
-                <ProjectCard project={project} className="h-full" />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      ) : null}
 
       {/* ---------------- Sayısal göstergeler ---------------- */}
       <section className="border-y border-border bg-bg py-12" aria-label="Rakamlarla firmamız">

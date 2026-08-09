@@ -35,7 +35,7 @@ export const Header = async () => {
         href: `${ROUTES.services}/${service.slug}`,
       })),
     },
-    { label: 'Etkinliklerimiz', href: ROUTES.projects },
+    { label: 'Blog', href: ROUTES.blog },
     { label: 'İletişim', href: ROUTES.contact },
   ]
 
@@ -65,8 +65,8 @@ export const Header = async () => {
           </ul>
 
           <div className="flex items-center gap-5">
-            <Link href={ROUTES.posts} className="text-white/80 transition-colors hover:text-white">
-              Haberler
+            <Link href={ROUTES.blog} className="text-white/80 transition-colors hover:text-white">
+              Blog
             </Link>
             <Link href={ROUTES.contact} className="text-white/80 transition-colors hover:text-white">
               İletişim
