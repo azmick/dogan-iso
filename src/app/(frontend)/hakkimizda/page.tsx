@@ -47,10 +47,10 @@ const WHY_US = [
 ]
 
 const STATS = [
-  { value: '15+', label: 'Yıllık saha tecrübesi' },
-  { value: '500+', label: 'Tamamlanan denetim' },
-  { value: '40+', label: 'Hizmet verilen sektör' },
-  { value: '20+', label: 'Denetçi kadrosu' },
+  { value: '25+', label: 'Yıllık saha tecrübesi' },
+  { value: '25+', label: 'Hizmet verilen sektör' },
+  // Üstteki iki kartın toplam genişliğini kaplar.
+  { value: '250+', label: 'Tamamlanan denetim', wide: true },
 ]
 
 export default function AboutPage() {
@@ -62,7 +62,7 @@ export default function AboutPage() {
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div className="rich-text">
-            <h2 className="section-title text-2xl sm:text-3xl">Firmamız Kimdir?</h2>
+            <h2 className="section-title text-2xl sm:text-3xl">Vegado Bilişim Kimdir?</h2>
 
             <p>
               Kuruluşumuz; ISO 27001 ve ISO 27701, ISO 22301, ISO 9001 başta olmak üzere yönetim
@@ -105,7 +105,9 @@ export default function AboutPage() {
               {STATS.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-border bg-bg-soft px-4 py-5 text-center"
+                  className={`rounded-lg border border-border bg-bg-soft px-4 py-5 text-center${
+                    stat.wide ? ' col-span-2' : ''
+                  }`}
                 >
                   <dt className="sr-only">{stat.label}</dt>
                   <dd>
