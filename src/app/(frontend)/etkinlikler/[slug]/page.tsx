@@ -8,7 +8,7 @@ import { PageHero } from '@/components/PageHero'
 import { RichText } from '@/components/RichText'
 import { Section } from '@/components/Section'
 import { formatDate, richTextToExcerpt, toISODate } from '@/lib/format'
-import { isMedia } from '@/lib/media'
+import { isMedia, toDisplayURL } from '@/lib/media'
 import { getProjectBySlug, getProjects } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { ROUTES } from '@/lib/site'
@@ -53,7 +53,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     .filter((item) => Boolean(item.url))
     .map((item) => ({
       id: String(item.id),
-      url: item.url as string,
+      url: toDisplayURL(item.url as string),
       alt: item.alt || project.title,
       width: item.width ?? undefined,
       height: item.height ?? undefined,
