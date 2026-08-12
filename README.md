@@ -13,7 +13,7 @@ Proje kuralları ve tasarım kararları için [CLAUDE.md](CLAUDE.md) dosyasına 
 | Framework | Next.js 16 (App Router, TypeScript, Server Components) |
 | CMS | Payload CMS 3 (aynı proje içinde gömülü) |
 | Veritabanı | Neon Postgres (`@payloadcms/db-postgres`) |
-| Dosya yükleme | Vercel Blob (`clientUploads: true`) |
+| Dosya yükleme | Sunucunun kendi diski (`MEDIA_DIR`) |
 | Stil | Tailwind CSS v4 (CSS-first `@theme` token'ları) |
 | Zengin metin | Payload Lexical editörü |
 | SEO | `@payloadcms/plugin-seo`, `generateMetadata`, `sitemap.ts`, `robots.ts`, JSON-LD |
@@ -36,7 +36,7 @@ pnpm install
 | `DATABASE_URI` | Neon Postgres bağlantı adresi (pooled connection string) |
 | `PAYLOAD_SECRET` | Rastgele uzun bir dize (oturum/şifreleme anahtarı) |
 | `NEXT_PUBLIC_SERVER_URL` | Sitenin genel adresi — canonical, OpenGraph ve sitemap için |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob okuma/yazma anahtarı. Boşsa yüklemeler yerel diske gider (yalnızca geliştirme). |
+| `MEDIA_DIR` | Panelden yüklenen görsellerin diskteki klasörü. Boşsa proje kökündeki `media/` kullanılır. |
 | `SMTP_*`, `CONTACT_NOTIFY_TO` | İletişim formu e-posta bildirimi (opsiyonel; boşsa kayıt yalnızca panele düşer) |
 
 Neon bağlantı adresini almak için: [neon.com](https://neon.com) → yeni proje →
@@ -121,6 +121,30 @@ Panelde tüm içerik türleri Türkçe etiketlerle listelenir:
 Header'daki *Kurumsal* menüsü `Sayfalar` koleksiyonundaki "Kurumsal menüsünde göster" işaretli
 kayıtlardan, *Hizmetlerimiz* menüsü ise `Hizmetler` koleksiyonundan otomatik oluşur.
 
+## Görseller nerede durur?
+
+Sitede iki ayrı görsel kaynağı var. Karıştırılınca "yerelde görünüyor, canlıda görünmüyor"
+sorunu çıkar; ayrımı bilmek yeterli:
+
+| | `public/` klasörü | Panel / Medya Kütüphanesi |
+| --- | --- | --- |
+| Dosyayı kim koyar | Geliştirici, elle | Müşteri, panelden |
+| Nerede durur | Repo (git) | Sunucunun diski (`MEDIA_DIR`) |
+| Canlıya nasıl çıkar | `git push` + deploy | Yüklendiği anda |
+| Ne için | Logo, favicon | Blog kapağı, hizmet görseli, içerik |
+
+Panelden yüklenen dosyalar `.gitignore`'dadır — **repoya girmez, kodla birlikte taşınmaz.**
+Yerelde panelden yüklediğiniz bir görsel yalnızca yerelde, canlı panelden yüklenen görsel
+yalnızca canlıda görünür. Bu beklenen davranıştır: içerik girişi canlı panelden yapılır.
+
+Logo ve favicon üç kademeli çözülür: **panelde yüklüyse panel → yoksa `public/` içindeki
+dosya → o da yoksa yazı tabanlı yer tutucu.** Hangi dosya adlarının tanındığı
+[`public/README.md`](public/README.md) içinde yazılıdır.
+
+> Sunucuda `MEDIA_DIR` değerini proje klasörünün **dışında** bir yola verin
+> (ör. `/var/www/dogan-iso/media`). Böylece kodu güncellemek müşterinin yüklediği
+> görsellere dokunmaz ve yedeklenecek tek bir klasör olur.
+
 ## MCP sunucusu (kodlama ajanları için)
 
 `@payloadcms/plugin-mcp` sayesinde içerik, bir MCP istemcisinden (Claude Code vb.) doğrudan
@@ -152,8 +176,11 @@ için `PAYLOAD_MCP_DISABLED=true` tanımlayın.
 
 1. Projeyi bir Git deposuna gönderin ve Vercel'de içe aktarın.
 2. Ortam değişkenlerini Vercel proje ayarlarına ekleyin (`DATABASE_URI`, `PAYLOAD_SECRET`,
-   `NEXT_PUBLIC_SERVER_URL`, `BLOB_READ_WRITE_TOKEN`, gerekiyorsa `SMTP_*`).
-3. Vercel > Storage > **Blob** deposu oluşturup token'ı ekleyin.
-4. Build komutunu `pnpm ci` yapın — böylece derlemeden önce migration'lar uygulanır.
+   `NEXT_PUBLIC_SERVER_URL`, gerekiyorsa `SMTP_*`).
+3. Build komutunu `pnpm ci` yapın — böylece derlemeden önce migration'lar uygulanır.
+
+> **Uyarı:** Vercel'in dosya sistemi kalıcı değildir; panelden yüklenen görseller her
+> deploy'da kaybolur. Bu proje artık yüklemeleri sunucunun kendi diskine yazıyor, yani
+> kalıcı diski olan bir sunucu (VPS) varsayıyor.
 
 Production'da `push` kapalıdır; şema değişikliklerini `pnpm migrate:create` ile üretip commit edin.

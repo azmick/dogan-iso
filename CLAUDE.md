@@ -16,15 +16,15 @@ Renk paleti farklı olacak — bu dosyadaki soğuk mavi/beyaz "güven & güvenli
 Framework: Next.js (App Router, TypeScript)
 CMS / Backend: Payload CMS 3 — Next.js projesinin içine gömülü (tek proje, tek deploy)
 Veritabanı: Neon Postgres (@payloadcms/db-postgres) — ücretsiz katman
-Görsel & dosya yükleme: Vercel Blob (@payloadcms/storage-vercel-blob) — ücretsiz katman. clientUploads: true ayarlanacak (Vercel'in 4.5MB sunucu-upload limitini aşmak için). Yerel diske upload YOK (Vercel dosya sistemi kalıcı değil).
-Deploy: Vercel
+Görsel & dosya yükleme: Sunucunun kendi diski (Payload'ın yerleşik upload'ı). Klasör MEDIA_DIR ile belirlenir; canlıda proje klasörünün dışında kalıcı bir yol verilir. Vercel Blob KALDIRILDI — kalıcı diski olan bir sunucuda gereksiz. Sabit görseller (logo, favicon) public/ klasöründe repoda taşınır; ayrıntı: public/README.md.
+Deploy: Kendi sunucumuz (VPS) — Node + Nginx. Vercel'den vazgeçildi (dosya sistemi kalıcı olmadığı için panelden yüklenen görseller her deploy'da kayboluyordu).
 Styling: Tailwind CSS (renkler Bölüm 4'teki token'larla tailwind.config'e işlenecek)
 Zengin metin: Payload'ın Lexical editörü
 SEO: @payloadcms/plugin-seo + App Router sitemap.ts / robots.ts + JSON-LD
 
 Kurulum yolu: Boş şablonla başla: npx create-payload-app@latest → Postgres → Neon connection string. Ardından bu dosyadaki yapıyı kur.
 
-Ortam değişkenleri (.env, gizli — repoya girmeyecek): DATABASE_URI, PAYLOAD_SECRET, BLOB_READ_WRITE_TOKEN.
+Ortam değişkenleri (.env, gizli — repoya girmeyecek): DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SERVER_URL, MEDIA_DIR.
 
 Production notları: Postgres adaptöründe push: process.env.NODE_ENV === 'development' (canlıda otomatik şema değişikliği kapalı, migration kullan).
 
