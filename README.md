@@ -17,7 +17,7 @@ Proje kuralları ve tasarım kararları için [CLAUDE.md](CLAUDE.md) dosyasına 
 | Stil | Tailwind CSS v4 (CSS-first `@theme` token'ları) |
 | Zengin metin | Payload Lexical editörü |
 | SEO | `@payloadcms/plugin-seo`, `generateMetadata`, `sitemap.ts`, `robots.ts`, JSON-LD |
-| Deploy | Vercel |
+| Deploy | Kendi sunucumuz (VPS) — Node + Nginx |
 
 ## Kurulum
 
@@ -43,7 +43,7 @@ Neon bağlantı adresini almak için: [neon.com](https://neon.com) → yeni proj
 **Connection string** → *Pooled connection* seçeneği.
 
 > **SSL notu:** Neon'un verdiği adres `?sslmode=require` ile biter; bunu
-> `?sslmode=verify-full` yapın (canlıdaki Vercel değişkeninde de). node-postgres
+> `?sslmode=verify-full` yapın (sunucudaki `.env` dosyasında da). node-postgres
 > bugün `require`'ı da tam doğrulama sayıyor, ama pg v9'da `require` sertifika
 > doğrulamayı bırakacak; `verify-full` yazmak hem "SECURITY WARNING: The SSL
 > modes 'prefer', 'require'..." uyarısını susturur hem de yükseltmede güvenliğin
@@ -90,7 +90,7 @@ admin@ornek-firma.com.tr / Degistir!2026
 | `pnpm mcp:key` | MCP istemcileri için API anahtarı üretir/yeniler |
 | `pnpm migrate:create` | Şema değişikliği için migration üretir |
 | `pnpm migrate` | Bekleyen migration'ları uygular |
-| `pnpm ci` | `migrate` + `build` (Vercel build komutu) |
+| `pnpm ci` | `migrate` + `build` (sunucuda deploy komutu) |
 
 ## Proje yapısı
 
@@ -172,15 +172,182 @@ Hangi koleksiyon/global'in hangi işlemlere açılabileceği ise `payload.config
 `Kullanıcılar` koleksiyonu bilinçli olarak MCP'ye açılmamıştır. Canlıda ucu tamamen kapatmak
 için `PAYLOAD_MCP_DISABLED=true` tanımlayın.
 
-## Vercel'e deploy
+## VPS'e deploy
 
-1. Projeyi bir Git deposuna gönderin ve Vercel'de içe aktarın.
-2. Ortam değişkenlerini Vercel proje ayarlarına ekleyin (`DATABASE_URI`, `PAYLOAD_SECRET`,
-   `NEXT_PUBLIC_SERVER_URL`, gerekiyorsa `SMTP_*`).
-3. Build komutunu `pnpm ci` yapın — böylece derlemeden önce migration'lar uygulanır.
+Site kendi sunucumuzda çalışır: **Node** uygulamayı 3000 portunda ayakta tutar, **Nginx**
+öne geçip 80/443'ten gelen trafiği ona iletir (reverse proxy), SSL sertifikası da
+Nginx'te durur.
 
-> **Uyarı:** Vercel'in dosya sistemi kalıcı değildir; panelden yüklenen görseller her
-> deploy'da kaybolur. Bu proje artık yüklemeleri sunucunun kendi diskine yazıyor, yani
-> kalıcı diski olan bir sunucu (VPS) varsayıyor.
+> **Neden Vercel değil?** Vercel'in dosya sistemi kalıcı değildir — panelden yüklenen
+> görseller her deploy'da silinirdi. Bu proje yüklemeleri sunucunun kendi diskine yazar,
+> dolayısıyla kalıcı diski olan bir sunucu gerekir.
 
-Production'da `push` kapalıdır; şema değişikliklerini `pnpm migrate:create` ile üretip commit edin.
+### 1. Klasör düzeni
+
+Kod ile müşterinin yüklediği görselleri **ayrı klasörlerde** tutun:
+
+```
+/var/www/dogan-iso/
+├── app/     ← git deposu (kod). Her deploy'da değişir.
+└── media/   ← MEDIA_DIR. Panelden yüklenenler. Deploy buraya dokunmaz.
+```
+
+Bu ayrım şart: `media/` proje klasörünün içinde kalırsa bir gün `git clean` ya da temiz
+bir kurulum müşterinin tüm görsellerini siler.
+
+### 2. Sunucu hazırlığı
+
+```bash
+# Node 22 + pnpm + Nginx kurulu olmalı
+sudo mkdir -p /var/www/dogan-iso/media
+sudo chown -R www-data:www-data /var/www/dogan-iso
+```
+
+`media/` klasörünün sahibi, uygulamayı çalıştıran kullanıcı olmalı — aksi hâlde panelden
+yükleme "permission denied" ile başarısız olur.
+
+### 3. Kod ve ortam değişkenleri
+
+```bash
+cd /var/www/dogan-iso
+git clone <repo-adresi> app
+cd app
+pnpm install --frozen-lockfile
+```
+
+Sunucudaki `.env` dosyasını oluşturun:
+
+```bash
+DATABASE_URI=postgresql://...?sslmode=verify-full&channel_binding=require
+PAYLOAD_SECRET=<uzun rastgele dize>
+NEXT_PUBLIC_SERVER_URL=https://ornek-firma.com.tr
+PAYLOAD_CSRF_ORIGINS=https://www.ornek-firma.com.tr
+MEDIA_DIR=/var/www/dogan-iso/media
+PAYLOAD_MCP_DISABLED=true
+```
+
+> **`NEXT_PUBLIC_SERVER_URL` derleme anında gömülür.** `NEXT_PUBLIC_` ile başlayan
+> değişkenler tarayıcıya giden koda yazılır, yani **`pnpm build`'den önce** doğru
+> olmalı. Sonradan değiştirirseniz yeniden derlemeniz gerekir.
+>
+> Değer, tarayıcıdaki adresin birebir aynısı olmalı (protokol dahil, sonda `/` yok).
+> Yanlışsa panelde kaydetme ve çıkış yapma **sessizce** çalışmaz. Siteye birden fazla
+> adresten giriliyorsa (www'lu/www'suz) diğerlerini `PAYLOAD_CSRF_ORIGINS`'e virgülle
+> ekleyin.
+
+> **Yerel ve canlı aynı veritabanını kullanmasın.** Yerelde yüklediğiniz görselin künyesi
+> ortak veritabanına yazılır ama dosya sizin diskinizde kalır; canlıda o görsel kırık
+> çıkar. Neon'da canlı için ayrı bir branch açın.
+
+### 4. İlk derleme
+
+```bash
+pnpm ci   # migration'ları uygular, sonra derler
+```
+
+### 5. systemd servisi
+
+Uygulamanın sunucu yeniden başlasa da ayakta kalması için
+`/etc/systemd/system/dogan-iso.service`:
+
+```ini
+[Unit]
+Description=dogan-iso (Next.js + Payload)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/dogan-iso/app
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/env pnpm start
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now dogan-iso
+sudo systemctl status dogan-iso
+```
+
+`.env` dosyasını Next.js kendisi okur; systemd'ye ayrıca tanıtmanıza gerek yoktur.
+
+### 6. Nginx
+
+`/etc/nginx/sites-available/dogan-iso`:
+
+```nginx
+server {
+    listen 80;
+    server_name ornek-firma.com.tr www.ornek-firma.com.tr;
+
+    # Panelden görsel yüklenebilmesi için ŞART. Nginx varsayılanı 1 MB'tır ve
+    # normal bir telefon fotoğrafı bunu aşar — müşteri "413 Request Entity
+    # Too Large" hatası alır.
+    client_max_body_size 25M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade           $http_upgrade;
+        proxy_set_header Connection        'upgrade';
+    }
+}
+```
+
+```bash
+sudo ln -s /etc/nginx/sites-available/dogan-iso /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d ornek-firma.com.tr -d www.ornek-firma.com.tr
+```
+
+`media/` klasörünü Nginx'ten doğrudan sunmayın — dosyalar Payload'ın
+`/api/media/file/...` ucundan gelir, klasörün web'e açık olması gerekmez.
+
+### 7. Güncelleme (sonraki deploy'lar)
+
+```bash
+cd /var/www/dogan-iso/app
+git pull
+pnpm install --frozen-lockfile
+pnpm ci
+sudo systemctl restart dogan-iso
+```
+
+Derleme sırasında birkaç saniyelik kesinti olur. `media/` klasörüne dokunulmadığı için
+müşterinin yüklediği görseller etkilenmez.
+
+Production'da `push` kapalıdır; şema değişikliklerini yerelde `pnpm migrate:create` ile
+üretip **commit edin** — sunucuda `pnpm ci` bunları otomatik uygular.
+
+### 8. Yedekleme
+
+Yedeklenecek **iki** şey var; ikisi birlikte alınmalı, yoksa kırık görseller çıkar:
+
+| Ne | Nasıl |
+| --- | --- |
+| Veritabanı | Neon kendi yedekliyor (point-in-time restore) |
+| `MEDIA_DIR` klasörü | **Sizin sorumluluğunuzda** — günlük `tar`/`rsync` |
+
+```bash
+tar -czf /yedek/media-$(date +%F).tar.gz -C /var/www/dogan-iso media
+```
+
+### Sık karşılaşılan sorunlar
+
+| Belirti | Sebep | Çözüm |
+| --- | --- | --- |
+| Yüklerken "413 Request Entity Too Large" | Nginx'in 1 MB varsayılanı | `client_max_body_size 25M;` |
+| Yüklerken "permission denied" | `MEDIA_DIR` yazılabilir değil | `chown -R www-data:www-data` |
+| Panelde kaydetme/çıkış sessizce çalışmıyor | `NEXT_PUBLIC_SERVER_URL` adresle uyuşmuyor | `.env`'i düzeltin, yeniden derleyip başlatın |
+| Görsel panelde var, sitede kırık | Yerel ve canlı aynı veritabanında | Canlıya ayrı veritabanı |
+| Deploy sonrası görseller kayboldu | `MEDIA_DIR` proje klasörünün içinde | Proje dışına taşıyın |
