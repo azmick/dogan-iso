@@ -35,16 +35,6 @@ export const CtaBand = async ({
           <Link href={buttonHref} className="btn btn-invert">
             {buttonLabel}
           </Link>
-
-          {contact?.phone ? (
-            <a
-              href={toTelHref(contact.phone)}
-              className="btn border border-white/30 text-white hover:bg-white/10"
-            >
-              <PhoneIcon width={17} height={17} />
-              {contact.phone}
-            </a>
-          ) : null}
         </div>
       </div>
     </section>
