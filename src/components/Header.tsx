@@ -91,7 +91,7 @@ export const Header = async () => {
 
       {/* Ana bar */}
       <div className="relative border-b border-border bg-bg shadow-[0_1px_3px_rgb(12_60_120/0.06)]">
-        <div className="container-site flex h-16 items-center justify-between gap-4 md:h-20">
+        <div className="container-site flex h-20 items-center justify-between gap-4 md:h-26">
           <Logo
             siteName={settings?.siteName || 'Örnek ISO Belgelendirme'}
             tagline={settings?.tagline}

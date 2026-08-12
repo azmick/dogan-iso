@@ -43,7 +43,7 @@ export const Logo = async ({ siteName, tagline, image, inverted = false }: LogoP
           height={logo.height ?? 56}
           priority
           sizes="(max-width: 768px) 160px, 220px"
-          className="h-12 w-auto object-contain md:h-14"
+          className="h-14 w-auto object-contain md:h-20"
         />
       ) : staticLogo ? (
         /*
@@ -56,7 +56,7 @@ export const Logo = async ({ siteName, tagline, image, inverted = false }: LogoP
          * ayarlar. Boşluksuz bir logoda oranlar %100 / 0 çıkar, hiçbir şey olmaz.
          */
         <span
-          className="relative block h-12 overflow-hidden md:h-14"
+          className="relative block h-14 overflow-hidden md:h-20"
           style={{ aspectRatio: `${staticLogo.content.width} / ${staticLogo.content.height}` }}
         >
           {/*
