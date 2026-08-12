@@ -8,9 +8,10 @@ import { CookieBanner } from '@/components/CookieBanner'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
-import { resolveOgImage } from '@/lib/media'
+import { resolveImage, resolveOgImage } from '@/lib/media'
 import { getContactInfo, getSiteSettings } from '@/lib/payload'
 import { SITE_URL } from '@/lib/seo'
+import { STATIC_FAVICON } from '@/lib/static-assets'
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
@@ -28,6 +29,9 @@ export const generateMetadata = async (): Promise<Metadata> => {
     'ISO yönetim sistemi belgelendirme, denetim ve KVKK uyum hizmetleri.'
   const ogImage = resolveOgImage(settings?.defaultSeo?.ogImage)
 
+  // Panelde favicon yüklüyse o, yoksa public/ klasörüne konan sabit dosya.
+  const favicon = resolveImage(settings?.favicon)?.url || STATIC_FAVICON
+
   return {
     metadataBase: new URL(SITE_URL),
     title: {
@@ -37,6 +41,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
     description,
     applicationName: siteName,
     alternates: { canonical: '/' },
+    icons: favicon ? { icon: favicon, apple: favicon } : undefined,
     openGraph: {
       type: 'website',
       locale: 'tr_TR',

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { resolveImage, type MediaLike } from '@/lib/media'
+import { STATIC_LOGO, STATIC_LOGO_INVERTED } from '@/lib/static-assets'
 
 type LogoProps = {
   siteName: string
@@ -12,11 +13,18 @@ type LogoProps = {
 }
 
 /**
- * Logo görseli yüklenmemişse yazı tabanlı yer tutucu logo gösterilir.
- * Gerçek logo panelden (Site Ayarları) yüklendiğinde otomatik devreye girer.
+ * Logo üç kademeli çözülür:
+ *   1. Panelde (Site Ayarları) logo yüklüyse o kullanılır.
+ *   2. Değilse `public/logo.svg` (footer için `public/logo-beyaz.svg`) aranır.
+ *      Bu dosyaları siz koyup commit edersiniz; canlıya kodla birlikte gider.
+ *   3. Hiçbiri yoksa firma adından oluşan yazı tabanlı yer tutucu gösterilir.
+ *
+ * Koyu zeminde yalnızca `logo-beyaz` kabul edilir — açık zemin logosu lacivert
+ * footer üzerinde okunmayacağı için, o dosya yoksa yazı logosuna düşülür.
  */
 export const Logo = ({ siteName, tagline, image, inverted = false }: LogoProps) => {
   const logo = resolveImage(image)
+  const staticLogo = inverted ? STATIC_LOGO_INVERTED : STATIC_LOGO
 
   return (
     <Link
@@ -32,6 +40,22 @@ export const Logo = ({ siteName, tagline, image, inverted = false }: LogoProps) 
           height={logo.height ?? 56}
           priority
           sizes="(max-width: 768px) 160px, 220px"
+          className="h-10 w-auto object-contain md:h-12"
+        />
+      ) : staticLogo ? (
+        /*
+         * `unoptimized`: bu dosya kendi public/ klasörümüzden geliyor ve zaten
+         * küçük. Next'in görsel iyileştiricisinden geçirmek gereksiz olduğu gibi,
+         * SVG'yi reddetmesine ve next.config'teki `localPatterns` listesine
+         * takılmasına da yol açardı.
+         */
+        <Image
+          src={staticLogo}
+          alt={siteName}
+          width={220}
+          height={56}
+          priority
+          unoptimized
           className="h-10 w-auto object-contain md:h-12"
         />
       ) : (
