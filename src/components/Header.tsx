@@ -56,23 +56,9 @@ export const Header = async () => {
                 <span className="max-w-[42ch] truncate">{contact.addressLine}</span>
               </li>
             ) : null}
-            {/* {contact?.phone ? (
-              <li>
-                <a
-                  href={toTelHref(contact.phone)}
-                  className="flex items-center gap-2 transition-colors hover:text-white"
-                >
-                  <PhoneIcon width={15} height={15} className="text-accent" />
-                  {contact.phone}
-                </a>
-              </li>
-            ) : null} */}
           </ul>
 
           <div className="flex items-center gap-5">
-            <Link href={ROUTES.blog} className="text-white/80 transition-colors hover:text-white">
-              Blog
-            </Link>
             <Link
               href={ROUTES.contact}
               className="text-white/80 transition-colors hover:text-white"
