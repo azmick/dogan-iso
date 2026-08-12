@@ -67,8 +67,8 @@ export default function AboutPage() {
             <p>
               Kuruluşumuz; ISO 27001 ve ISO 27701, ISO 22301, ISO 9001 başta olmak üzere yönetim
               sistemi standartlarında denetim ve danışmanlık hizmeti veren bağımsız bir kuruluştur.
-              Aynı çatı altında KVKK uyum danışmanlığı, teknik gereksinim çözümleri, eğitim ve SGK
-              teşvik danışmanlığı hizmetleri de sunuyoruz.
+              Aynı çatı altında KVKK uyum danışmanlığı, teknik gereksinim çözümleri ve eğitim
+              hizmetleri de sunuyoruz.
             </p>
 
             <p>
@@ -83,13 +83,6 @@ export default function AboutPage() {
               tarafından alınır. Bu ayrım, tarafsızlık ilkemizin uygulamadaki karşılığıdır. Tüm
               denetim kayıtları gizlilik prosedürlerimiz kapsamında saklanır ve üçüncü taraflarla
               paylaşılmaz.
-            </p>
-
-            <p className="text-sm text-text-muted">
-              <em>
-                Bu sayfadaki metinler temsilidir; yönetim panelinden kendi kurumsal metinlerinizle
-                değiştirilebilir.
-              </em>
             </p>
           </div>
 
