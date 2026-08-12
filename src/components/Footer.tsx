@@ -110,7 +110,7 @@ export const Footer = async () => {
                   <span className="whitespace-pre-line">{contact.addressLine}</span>
                 </li>
               ) : null}
-              {contact?.phone ? (
+              {/* {contact?.phone ? (
                 <li className="flex gap-3">
                   <PhoneIcon width={17} height={17} className="mt-0.5 shrink-0 text-accent" />
                   <a
@@ -120,7 +120,7 @@ export const Footer = async () => {
                     {contact.phone}
                   </a>
                 </li>
-              ) : null}
+              ) : null} */}
               {contact?.email ? (
                 <li className="flex gap-3">
                   <MailIcon width={17} height={17} className="mt-0.5 shrink-0 text-accent" />

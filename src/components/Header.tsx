@@ -5,7 +5,12 @@ import { Logo } from '@/components/Logo'
 import { SiteNav } from '@/components/SiteNav'
 import { SocialLinks } from '@/components/SocialLinks'
 import { toTelHref } from '@/lib/format'
-import { getContactInfo, getCorporateMenuPages, getServiceLinks, getSiteSettings } from '@/lib/payload'
+import {
+  getContactInfo,
+  getCorporateMenuPages,
+  getServiceLinks,
+  getSiteSettings,
+} from '@/lib/payload'
 import { ROUTES, type NavItem } from '@/lib/site'
 
 export const Header = async () => {
@@ -51,7 +56,7 @@ export const Header = async () => {
                 <span className="max-w-[42ch] truncate">{contact.addressLine}</span>
               </li>
             ) : null}
-            {contact?.phone ? (
+            {/* {contact?.phone ? (
               <li>
                 <a
                   href={toTelHref(contact.phone)}
@@ -61,14 +66,17 @@ export const Header = async () => {
                   {contact.phone}
                 </a>
               </li>
-            ) : null}
+            ) : null} */}
           </ul>
 
           <div className="flex items-center gap-5">
             <Link href={ROUTES.blog} className="text-white/80 transition-colors hover:text-white">
               Blog
             </Link>
-            <Link href={ROUTES.contact} className="text-white/80 transition-colors hover:text-white">
+            <Link
+              href={ROUTES.contact}
+              className="text-white/80 transition-colors hover:text-white"
+            >
               İletişim
             </Link>
             {contact?.email ? (
