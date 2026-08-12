@@ -33,7 +33,10 @@ yalnızca panel boşken devreye girer.
 
 - **Koyu zemin logosu ayrı olmalı.** `logo-beyaz.*` yoksa footer, açık zemin
   logosunu kullanmaz (lacivert üzerinde okunmaz) — yazı logosuna düşer.
-- **Önerilen logo yüksekliği:** 56 piksel. Şeffaf arka planlı SVG veya PNG.
+- **Kenar boşluğu dert değil.** Logo dosyalarının çevresinde genelde şeffaf boşluk
+  olur; bu boşluk yükseklikle birlikte ölçeklendiği için logo olduğundan küçük
+  görünürdü. Site artık dosyanın içindeki görünür alanı ölçüp boşluğu CSS ile
+  kırpıyor — dosyayı elden geçirmenize gerek yok, olduğu gibi atın.
 - **Yeni dosya ekledikten sonra** `pnpm dev`'i yeniden başlatın; dosya varlığı
   sunucu açılırken bir kez okunur.
 - `favicon.svg` şu an yer tutucudur (lacivert kare + beyaz onay işareti).

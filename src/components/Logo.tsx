@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { resolveImage, type MediaLike } from '@/lib/media'
-import { STATIC_LOGO, STATIC_LOGO_INVERTED } from '@/lib/static-assets'
+import { getLogoAsset } from '@/lib/static-assets'
 
 type LogoProps = {
   siteName: string
@@ -15,16 +15,19 @@ type LogoProps = {
 /**
  * Logo üç kademeli çözülür:
  *   1. Panelde (Site Ayarları) logo yüklüyse o kullanılır.
- *   2. Değilse `public/logo.svg` (footer için `public/logo-beyaz.svg`) aranır.
- *      Bu dosyaları siz koyup commit edersiniz; canlıya kodla birlikte gider.
+ *   2. Değilse `public/` içindeki logo dosyası aranır (bkz. lib/static-assets).
+ *      Bu dosyayı siz koyup commit edersiniz; canlıya kodla birlikte gider.
  *   3. Hiçbiri yoksa firma adından oluşan yazı tabanlı yer tutucu gösterilir.
  *
- * Koyu zeminde yalnızca `logo-beyaz` kabul edilir — açık zemin logosu lacivert
- * footer üzerinde okunmayacağı için, o dosya yoksa yazı logosuna düşülür.
+ * ÖLÇÜ: Logo dosyalarının kenarlarında genelde şeffaf boşluk olur ve bu boşluk
+ * da yükseklikle birlikte ölçeklendiği için logo olduğundan küçük görünür.
+ * Dosyayı kırpmıyoruz — görünür alanın sınırlarını `getLogoAsset` ölçüyor,
+ * burada da CSS ile boşluk kırpılmış gibi gösteriliyor. Boşluksuz bir logoda
+ * hesap 1'e 1 çıkar, yani davranış değişmez.
  */
-export const Logo = ({ siteName, tagline, image, inverted = false }: LogoProps) => {
+export const Logo = async ({ siteName, tagline, image, inverted = false }: LogoProps) => {
   const logo = resolveImage(image)
-  const staticLogo = inverted ? STATIC_LOGO_INVERTED : STATIC_LOGO
+  const staticLogo = logo ? null : await getLogoAsset(inverted)
 
   return (
     <Link
@@ -40,24 +43,44 @@ export const Logo = ({ siteName, tagline, image, inverted = false }: LogoProps) 
           height={logo.height ?? 56}
           priority
           sizes="(max-width: 768px) 160px, 220px"
-          className="h-10 w-auto object-contain md:h-12"
+          className="h-12 w-auto object-contain md:h-14"
         />
       ) : staticLogo ? (
         /*
-         * `unoptimized`: bu dosya kendi public/ klasörümüzden geliyor ve zaten
-         * küçük. Next'in görsel iyileştiricisinden geçirmek gereksiz olduğu gibi,
-         * SVG'yi reddetmesine ve next.config'teki `localPatterns` listesine
-         * takılmasına da yol açardı.
+         * Şeffaf kenar boşluğunu CSS ile kırpıyoruz — dosyaya dokunmadan.
+         *
+         * Dış kutunun en-boy oranı logonun GÖRÜNÜR alanına eşitlenir; görsel de
+         * içeride, o görünür alan kutuyu tam dolduracak kadar büyütülüp kaydırılır.
+         * Taşan şeffaf kısmı `overflow-hidden` kırpar. Bütün ölçüler yüzde
+         * olduğu için header yüksekliğini değiştirmek yeterli, hesap kendini
+         * ayarlar. Boşluksuz bir logoda oranlar %100 / 0 çıkar, hiçbir şey olmaz.
          */
-        <Image
-          src={staticLogo}
-          alt={siteName}
-          width={220}
-          height={56}
-          priority
-          unoptimized
-          className="h-10 w-auto object-contain md:h-12"
-        />
+        <span
+          className="relative block h-12 overflow-hidden md:h-14"
+          style={{ aspectRatio: `${staticLogo.content.width} / ${staticLogo.content.height}` }}
+        >
+          {/*
+           * `unoptimized`: dosya kendi public/ klasörümüzden geliyor ve zaten küçük.
+           * Next'in iyileştiricisinden geçirmek gereksiz olduğu gibi, SVG'yi
+           * reddetmesine ve next.config'teki `localPatterns` listesine takılmasına
+           * da yol açardı.
+           */}
+          <Image
+            src={staticLogo.url}
+            alt={siteName}
+            width={staticLogo.width}
+            height={staticLogo.height}
+            priority
+            unoptimized
+            className="absolute max-w-none"
+            style={{
+              width: `${(staticLogo.width / staticLogo.content.width) * 100}%`,
+              height: `${(staticLogo.height / staticLogo.content.height) * 100}%`,
+              left: `${(-staticLogo.content.x / staticLogo.content.width) * 100}%`,
+              top: `${(-staticLogo.content.y / staticLogo.content.height) * 100}%`,
+            }}
+          />
+        </span>
       ) : (
         <>
           <span
