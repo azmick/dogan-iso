@@ -113,7 +113,10 @@ export const Footer = async () => {
               {contact?.phone ? (
                 <li className="flex gap-3">
                   <PhoneIcon width={17} height={17} className="mt-0.5 shrink-0 text-accent" />
-                  <a href={toTelHref(contact.phone)} className="transition-colors hover:text-accent">
+                  <a
+                    href={toTelHref(contact.phone)}
+                    className="transition-colors hover:text-accent"
+                  >
                     {contact.phone}
                   </a>
                 </li>
@@ -172,8 +175,10 @@ export const Footer = async () => {
             © {new Date().getFullYear()} {siteName}. Tüm hakları saklıdır.
           </p>
           <p>
-            Bu sitedeki içerikler temsilidir.{' '}
-            <Link href={ROUTES.contact} className="underline-offset-2 hover:text-accent hover:underline">
+            <Link
+              href={ROUTES.contact}
+              className="underline-offset-2 hover:text-accent hover:underline"
+            >
               Bize ulaşın
             </Link>
           </p>
