@@ -38,10 +38,10 @@ describe('toDisplayURL', () => {
     expect(toDisplayURL('/api/media/file/logo.png')).toBe('/api/media/file/logo.png')
   })
 
-  it('dış depolamadaki (Vercel Blob) adresi mutlak bırakır', () => {
-    const blob = 'https://abc123.public.blob.vercel-storage.com/logo.png'
+  it('kendi dosya yolumuza uymayan dış adresi mutlak bırakır', () => {
+    const external = 'https://cdn.ornek.com/logo.png'
 
-    expect(toDisplayURL(blob)).toBe(blob)
+    expect(toDisplayURL(external)).toBe(external)
   })
 })
 

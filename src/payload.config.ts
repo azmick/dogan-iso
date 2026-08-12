@@ -3,7 +3,6 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { mcpPlugin } from '@payloadcms/plugin-mcp'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig, type Plugin } from 'payload'
 import { en } from 'payload/i18n/en'
@@ -24,19 +23,7 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-/**
- * Vercel'in otomatik verdiği adresler.
- * - VERCEL_PROJECT_PRODUCTION_URL: projenin canlı alan adı (ör. ornek-firma.com.tr)
- * - VERCEL_URL: o dağıtıma özel adres (ör. dogan-iso-abc123.vercel.app)
- */
-const vercelProductionURL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : undefined
-
-const vercelDeploymentURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined
-
-const serverURL =
-  process.env.NEXT_PUBLIC_SERVER_URL || vercelProductionURL || 'http://localhost:3000'
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
 /**
  * CSRF allowlist — panelin çıkış/kaydetme gibi POST isteklerinde tarayıcının
@@ -45,18 +32,12 @@ const serverURL =
  * (ör. çıkışta yine "başarılı" der ama çerez silinmez), o yüzden listenin
  * eksiksiz olması önemli.
  *
- * serverURL'i Payload kendisi ekler; biz Vercel'in verdiği adresleri ve
- * PAYLOAD_CSRF_ORIGINS ile bildirilen ek adresleri (www'lu/www'suz alan adı,
- * özel alan adları) ekliyoruz.
+ * serverURL'i Payload kendisi ekler; biz PAYLOAD_CSRF_ORIGINS ile bildirilen
+ * ek adresleri (www'lu/www'suz alan adı, sunucunun IP'si) ekliyoruz.
  */
 const csrf = Array.from(
   new Set(
-    [
-      serverURL,
-      vercelProductionURL,
-      vercelDeploymentURL,
-      ...(process.env.PAYLOAD_CSRF_ORIGINS || '').split(','),
-    ]
+    [serverURL, ...(process.env.PAYLOAD_CSRF_ORIGINS || '').split(',')]
       .map((origin) => origin?.trim().replace(/\/$/, ''))
       .filter((origin): origin is string => Boolean(origin)),
   ),
@@ -184,22 +165,6 @@ localizeMcpKeysCollection.order = 20
 localizeMcpKeysCollection.slug = 'dogan-iso/localize-mcp-keys'
 
 plugins.push(localizeMcpKeysCollection)
-
-// BLOB_READ_WRITE_TOKEN tanımlıysa yüklemeler Vercel Blob'a gider.
-// Token yoksa (ilk kurulum / yerel geliştirme) eklenti devre dışı kalır.
-if (process.env.BLOB_READ_WRITE_TOKEN) {
-  plugins.push(
-    vercelBlobStorage({
-      enabled: true,
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-      // Vercel'in 4.5MB sunucu-upload limitini aşmak için doğrudan istemciden yükleme
-      clientUploads: true,
-    }),
-  )
-}
 
 export default buildConfig({
   serverURL,

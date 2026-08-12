@@ -25,9 +25,8 @@ const PAYLOAD_FILE_PATH = /^\/api\/[^/]+\/file\//
  *
  * Dosya bizim kendi sunucumuzdan geldiği için doğru çözüm origin'i kırpıp
  * kök-göreli yola çevirmek: `/api/media/file/...`. Bu hem next.config'teki
- * `localPatterns` ile eşleşir hem de yerel/preview/canlı adres farklarından
- * etkilenmez. Dış depolamadan (ör. Vercel Blob doğrudan servis) gelen adresler
- * bu kalıba uymaz ve aynen bırakılır.
+ * `localPatterns` ile eşleşir hem de yerel/canlı adres farklarından etkilenmez.
+ * Bu kalıba uymayan dış adresler (ileride bir CDN kullanılırsa) aynen bırakılır.
  */
 export const toDisplayURL = (url: string): string => {
   if (url.startsWith('/')) return url

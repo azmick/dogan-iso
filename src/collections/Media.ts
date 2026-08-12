@@ -1,7 +1,24 @@
+import path from 'path'
 import type { CollectionConfig } from 'payload'
 
 import { anyone, authenticated } from '../access'
 import { revalidateWholeSiteAfterChange, revalidateWholeSiteAfterDelete } from '../lib/revalidate'
+
+/**
+ * Panelden yüklenen dosyaların diskteki yeri.
+ *
+ * Varsayılan: proje kökündeki `media/` klasörü (yerel geliştirme için yeterli).
+ * Bu klasör `.gitignore`'dadır — yani buradaki dosyalar repoya girmez, sunucuya
+ * kod ile birlikte taşınmaz. Yerelde yüklediğiniz görsel yalnızca yerelde,
+ * canlı panelden yüklenen görsel yalnızca sunucuda görünür. Bu normaldir.
+ *
+ * Sunucuda MEDIA_DIR ile proje klasörünün DIŞINDA bir yol verin
+ * (ör. /var/www/dogan-iso/media). Böylece `git pull` + yeniden build
+ * müşterinin yüklediği görselleri etkilemez ve yedeklemesi tek klasör olur.
+ */
+const staticDir = process.env.MEDIA_DIR
+  ? path.resolve(process.env.MEDIA_DIR)
+  : path.resolve(process.cwd(), 'media')
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -53,7 +70,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    // Vercel Blob eklentisi devredeyken dosyalar Blob'a yüklenir.
+    staticDir,
     mimeTypes: ['image/*', 'application/pdf'],
     focalPoint: true,
     displayPreview: true,
