@@ -30,11 +30,7 @@ const firstExisting = (filenames: string[]): string | null => {
 export const STATIC_LOGO = firstExisting(['logo.svg', 'logo.png', 'logo.webp'])
 
 /** Koyu zemin (footer) için logonun beyaz/ters versiyonu. */
-export const STATIC_LOGO_INVERTED = firstExisting([
-  'logo-beyaz.svg',
-  'logo-beyaz.png',
-  'logo-beyaz.webp',
-])
+export const STATIC_LOGO_INVERTED = firstExisting(['logo.svg', 'logo.png', 'logo.webp'])
 
 /** Tarayıcı sekmesi simgesi. */
 export const STATIC_FAVICON = firstExisting(['favicon.svg', 'favicon.ico', 'favicon.png'])
