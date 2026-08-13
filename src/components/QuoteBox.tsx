@@ -13,7 +13,7 @@ export const QuoteBox = async () => {
     <div className="rounded-lg bg-primary p-6 text-white">
       <h2 className="text-lg font-bold text-white">Hemen Teklif Al</h2>
       <p className="mt-2.5 text-sm leading-relaxed text-white/80">
-        Kapsamınıza uygun fiyat ve takvim için bize ulaşın. Aynı gün içinde dönüş yapıyoruz.
+        Kapsamınıza uygun fiyat ve takvim için bize ulaşın.
       </p>
 
       <div className="mt-5 flex flex-col gap-2.5">
