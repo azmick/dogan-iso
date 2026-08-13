@@ -29,7 +29,7 @@ const VALUES = [
   },
   {
     title: 'Vizyonumuz',
-    text: 'Belgelendirme hizmetlerinde güvenilirliğiyle anılan, denetim kalitesini sürekli geliştiren ve sektöre değer katan bir kuruluş olmak.',
+    text: 'Belgelendirme hizmetlerinde güvenilirliğiyle anılan, hizmet kalitesini sürekli geliştiren ve sektöre değer katan bir kuruluş olmak.',
   },
   {
     title: 'Değerlerimiz',
@@ -65,24 +65,16 @@ export default function AboutPage() {
             <h2 className="section-title text-2xl sm:text-3xl">Vegado Bilişim Kimdir?</h2>
 
             <p>
-              Kuruluşumuz; ISO 27001 ve ISO 27701, ISO 22301, ISO 9001 başta olmak üzere yönetim
-              sistemi standartlarında denetim ve danışmanlık hizmeti veren bağımsız bir kuruluştur.
-              Aynı çatı altında KVKK uyum danışmanlığı, teknik gereksinim çözümleri ve eğitim
-              hizmetleri de sunuyoruz.
+              ISO standartları başta olmak üzere, geniş bir yelpazede sunduğumuz hizmetlerimizle,
+              işletmelerin yönetim sistemlerini güçlendirmeyi ve uluslararası alanda rekabet gücünü
+              artırmayı hedefliyoruz. Misyonumuz, Kuruluşların yönetim sistemlerini uluslararası
+              standartlara uygun şekilde kurmalarına ve sürdürmelerine; tarafsız, şeffaf ve
+              izlenebilir denetim süreçleriyle katkı sağlamaktır.
             </p>
 
             <p>
-              Denetim yaklaşımımız, kuruluşların günlük işleyişini aksatmadan gerçek riskleri
-              görünür kılmayı hedefler. Denetim ekiplerimiz; kuruluşun sektörü, ölçeği ve süreç
-              olgunluğu dikkate alınarak oluşturulur. Böylece hem standardın gereklilikleri
-              karşılanır hem de kuruluşa somut bir iyileştirme yol haritası bırakılır.
-            </p>
-
-            <p>
-              Belgelendirme kararları, denetimi gerçekleştiren ekipten bağımsız bir karar vericisi
-              tarafından alınır. Bu ayrım, tarafsızlık ilkemizin uygulamadaki karşılığıdır. Tüm
-              denetim kayıtları gizlilik prosedürlerimiz kapsamında saklanır ve üçüncü taraflarla
-              paylaşılmaz.
+              Farklı uzmanlık alanlarımızla hem mevcut iş süreçlerini güçlendiren hem de geleceğe
+              hazırlayan stratejik çözümler sunuyoruz.
             </p>
           </div>
 
