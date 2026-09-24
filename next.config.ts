@@ -7,6 +7,9 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  // `next dev` proje kökündeki CLAUDE.md'ye kendi bloğunu eklemesin —
+  // o dosya projenin elle yazılmış talimat setidir.
+  agentRules: false,
   experimental: {
     // CSS'i <link rel="stylesheet"> yerine HTML'in içine <style> olarak göm.
     // Böylece ilk boyama için ayrı CSS isteği beklenmez (render-blocking kalkar).
