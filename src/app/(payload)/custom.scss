@@ -486,6 +486,14 @@ html[data-theme='dark'] .dg-login-intro__title {
   padding-inline-end: 3rem;
 }
 
+/* Edge'in kendi göz ve temizle düğmeleri gizlenir; alanda yalnızca bizim
+   butonumuz kalır. Edge'in gözü yazarken çıkıp bizim butonla açılınca kayboluyor,
+   iki göz yan yana kafa karıştırıyor. */
+.dg-password-toggle input::-ms-reveal,
+.dg-password-toggle input::-ms-clear {
+  display: none;
+}
+
 .dg-password-toggle__button {
   position: absolute;
   inset-block: 0;
