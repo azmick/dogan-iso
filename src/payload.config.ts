@@ -190,6 +190,7 @@ export default buildConfig({
         Logo: '/admin/components/graphics/Logo#AdminLogo',
       },
       beforeLogin: ['/admin/components/BeforeLogin#BeforeLogin'],
+      afterLogin: ['/admin/components/PasswordToggle#PasswordToggle'],
       beforeNavLinks: ['/admin/components/NavShortcuts#NavShortcuts'],
       beforeDashboard: ['/admin/components/Dashboard#AdminDashboard'],
     },

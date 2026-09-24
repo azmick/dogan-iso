@@ -28,6 +28,7 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { AdminIcon as AdminIcon_532fd8acb2d9b4e0008af6984a4db5ac } from '../../../admin/components/graphics/Icon'
 import { AdminLogo as AdminLogo_c6d2ed9746fee937a33ce1dc77d18691 } from '../../../admin/components/graphics/Logo'
+import { PasswordToggle as PasswordToggle_6d12d5d3d73cae09d05787aab2cab41f } from '../../../admin/components/PasswordToggle'
 import { AdminDashboard as AdminDashboard_b295b4b15b1580ad6909e17dc5fe938c } from '../../../admin/components/Dashboard'
 import { BeforeLogin as BeforeLogin_ac5b2e88194d05c6cee3ca6b661ccfb1 } from '../../../admin/components/BeforeLogin'
 import { NavShortcuts as NavShortcuts_72477beb15522f82d5f2abffaddf1169 } from '../../../admin/components/NavShortcuts'
@@ -65,6 +66,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "/admin/components/graphics/Icon#AdminIcon": AdminIcon_532fd8acb2d9b4e0008af6984a4db5ac,
   "/admin/components/graphics/Logo#AdminLogo": AdminLogo_c6d2ed9746fee937a33ce1dc77d18691,
+  "/admin/components/PasswordToggle#PasswordToggle": PasswordToggle_6d12d5d3d73cae09d05787aab2cab41f,
   "/admin/components/Dashboard#AdminDashboard": AdminDashboard_b295b4b15b1580ad6909e17dc5fe938c,
   "/admin/components/BeforeLogin#BeforeLogin": BeforeLogin_ac5b2e88194d05c6cee3ca6b661ccfb1,
   "/admin/components/NavShortcuts#NavShortcuts": NavShortcuts_72477beb15522f82d5f2abffaddf1169,
