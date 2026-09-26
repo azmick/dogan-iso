@@ -19,6 +19,8 @@ const HERO_SLIDES: HeroSlide[] = [
       'ISO 27001 kapsamında kurumunuzun bilgi varlıklarını sınıflandırıyor, risk analizini yapıyor ve belgelendirme denetimine hazır hâle getiriyoruz.',
     ctaLabel: 'Hizmeti İnceleyin',
     ctaHref: ROUTES.services,
+    imageUrl: '/images/hero/bilgi-guvenligi.jpg',
+    imageAlt: 'Bilgi güvenliği görseli',
   },
   {
     title: 'KVKK Uyum Süreçlerinizi Uçtan Uca Yönetin',
@@ -26,6 +28,8 @@ const HERO_SLIDES: HeroSlide[] = [
       'Veri envanteri, aydınlatma metinleri, açık rıza yönetimi ve VERBİS bildirimlerine kadar tüm uyum adımlarında yanınızdayız.',
     ctaLabel: 'KVKK Hizmetlerimiz',
     ctaHref: ROUTES.services,
+    imageUrl: '/images/hero/kvkk-uyum.webp',
+    imageAlt: 'Kvkk süreçleriyle ilgilenen ekip görseli',
   },
   {
     title: 'KVKK Teknik Gereksinim Çözümleri',
@@ -33,6 +37,8 @@ const HERO_SLIDES: HeroSlide[] = [
       'Log yönetimi, yetkilendirme matrisi, sızma testi ve veri maskeleme gibi teknik tedbirleri kurumunuza uygun şekilde kurguluyoruz.',
     ctaLabel: 'Teknik Çözümler',
     ctaHref: ROUTES.services,
+    imageUrl: '/images/hero/kvkk-teknik.webp',
+    imageAlt: 'Veri şifreleme adına bulut içinde bir anahtar görseli.',
   },
   {
     title: 'Eğitim ve Seminer Hizmetleri',
@@ -40,6 +46,8 @@ const HERO_SLIDES: HeroSlide[] = [
       'Baş denetçi, iç denetçi ve farkındalık eğitimleriyle ekiplerinizin standartları doğru yorumlamasını sağlıyoruz.',
     ctaLabel: 'Eğitim Takvimi',
     ctaHref: ROUTES.services,
+    imageUrl: '/images/hero/egitim.png',
+    imageAlt: 'Eğitim hizmeti veren bir adam',
   },
 ]
 
