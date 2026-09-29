@@ -12,7 +12,7 @@ import { ROUTES } from '@/lib/site'
 export const revalidate = 300
 
 const DESCRIPTION =
-  'ISO 27001, ISO 9001, ISO 14001, ISO 45001 ve ISO 27701 belgelendirme; KVKK uyum danışmanlığı, teknik gereksinim çözümleri, eğitim ve SGK teşvik hizmetlerimiz.'
+  'ISO 27001, ISO 27701, ISO 22301, ISO 20001-1, ISO 9001 Belgelendirme Danışmanlığı | Bilgi Güvenliği & KVKK Uyum Danışmanlığı'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   buildMetadata({
