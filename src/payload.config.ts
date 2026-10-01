@@ -203,6 +203,17 @@ export default buildConfig({
   i18n: {
     fallbackLanguage: 'tr',
     supportedLanguages: { tr, en },
+    // Payload'ın Türkçe çevirisindeki hatalı karşılıkları düzeltir; geri kalan
+    // metinler olduğu gibi kalır. Görsel kırpma ekranında "crop" kelimesi
+    // "Mahsulat" / "Mahsul alanını ayarla" (ekin, hasat) diye çevrilmiş.
+    translations: {
+      tr: {
+        upload: {
+          crop: 'Kırp',
+          setCropArea: 'Kırpma alanını ayarla',
+        },
+      },
+    },
   },
   collections: [Services, Posts, Pages, Faq, Media, ContactSubmissions, Users],
   globals: [SiteSettings, ContactInfo],
