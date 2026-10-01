@@ -13,7 +13,7 @@ import { ROUTES } from '@/lib/site'
 export const revalidate = 300
 
 const DESCRIPTION =
-  'Bağımsız bir belgelendirme kuruluşu olarak yönetim sistemi standartlarında denetim, belgelendirme ve uyum danışmanlığı hizmetleri sunuyoruz.'
+  'Bilgi Teknolojileri & Bilgi Güvenliği kapsamında denetim, eğitim ve danışmanlık hizmeti vermekteyiz.'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   buildMetadata({
