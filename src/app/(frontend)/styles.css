@@ -294,6 +294,53 @@
   }
 }
 
+/* ------------------------------------------------------------------
+   Açılır pencere (Modal, native <dialog>): açılış/kapanış geçişi
+------------------------------------------------------------------ */
+@layer components {
+  .modal {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+    transition-property: opacity, transform, overlay, display;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+    transition-behavior: allow-discrete;
+  }
+
+  .modal[open] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ::backdrop eski tarayıcılarda :root değişkenlerini devralmadığı için
+     --color-navy (#0A1F3C) doğrudan yazıldı. */
+  .modal::backdrop {
+    background-color: rgb(10 31 60 / 0);
+    backdrop-filter: blur(0);
+    transition-property: background-color, backdrop-filter, overlay, display;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+    transition-behavior: allow-discrete;
+  }
+
+  .modal[open]::backdrop {
+    background-color: rgb(10 31 60 / 0.6);
+    backdrop-filter: blur(3px);
+  }
+
+  @starting-style {
+    .modal[open] {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.98);
+    }
+
+    .modal[open]::backdrop {
+      background-color: rgb(10 31 60 / 0);
+      backdrop-filter: blur(0);
+    }
+  }
+}
+
 /* Hareket azaltma tercihi */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -305,6 +352,11 @@
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Ayrı kural: ::backdrop'u tanımayan bir tarayıcı yukarıdakini de yok saymasın */
+  ::backdrop {
     transition-duration: 0.01ms !important;
   }
 }

@@ -1,15 +1,24 @@
 'use client'
 
-import Link from 'next/link'
-import { useActionState } from 'react'
+import { useActionState, useState, type FormEvent, type ReactNode } from 'react'
 import { useFormStatus } from 'react-dom'
 
-import { CheckIcon } from '@/components/Icons'
+import { CheckIcon, ShieldCheckIcon } from '@/components/Icons'
+import { Modal } from '@/components/Modal'
 import {
   initialContactFormState,
   submitContactForm,
   type ContactFormState,
 } from '@/app/(frontend)/iletisim/actions'
+
+type ContactFormProps = {
+  /** Açılır pencerede gösterilen aydınlatma metni başlığı (paneldeki sayfa başlığı). */
+  kvkkNoticeTitle: string
+  /** Aydınlatma metninin kendisi — sunucuda hazırlanıp buraya verilir. */
+  kvkkNotice: ReactNode
+}
+
+const KVKK_REQUIRED_MESSAGE = 'Devam etmek için aydınlatma metnini onaylamanız gerekir.'
 
 const fieldClass =
   'w-full rounded-md border bg-bg px-3.5 py-2.5 text-[15px] text-text transition-colors placeholder:text-text-muted/60 focus:border-accent focus:outline-none'
@@ -33,11 +42,37 @@ const FieldError = ({ id, message }: { id: string; message?: string }) =>
     </p>
   ) : null
 
-export const ContactForm = () => {
+export const ContactForm = ({ kvkkNoticeTitle, kvkkNotice }: ContactFormProps) => {
   const [state, formAction] = useActionState<ContactFormState, FormData>(
     submitContactForm,
     initialContactFormState,
   )
+
+  // Onay yalnızca açılır penceredeki "Kabul Ediyorum" ile verilir.
+  const [kvkkAccepted, setKvkkAccepted] = useState(false)
+  const [kvkkOpen, setKvkkOpen] = useState(false)
+  const [kvkkMissing, setKvkkMissing] = useState(false)
+
+  const acceptKvkk = () => {
+    setKvkkAccepted(true)
+    setKvkkMissing(false)
+    setKvkkOpen(false)
+  }
+
+  const rejectKvkk = () => {
+    setKvkkAccepted(false)
+    setKvkkMissing(true)
+    setKvkkOpen(false)
+  }
+
+  // Onay yoksa form sunucuya hiç gitmez; onun yerine metin açılır.
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if (kvkkAccepted) return
+
+    event.preventDefault()
+    setKvkkMissing(true)
+    setKvkkOpen(true)
+  }
 
   if (state.status === 'success') {
     return (
@@ -55,9 +90,22 @@ export const ContactForm = () => {
   }
 
   const errors = state.errors ?? {}
+  const kvkkError = kvkkAccepted
+    ? undefined
+    : (errors.kvkk ?? (kvkkMissing ? KVKK_REQUIRED_MESSAGE : undefined))
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
+    <form
+      action={formAction}
+      onSubmit={handleSubmit}
+      // React gönderimden sonra formu sıfırlar; onay durumu da kutucukla birlikte sıfırlansın.
+      onReset={() => {
+        setKvkkAccepted(false)
+        setKvkkMissing(false)
+      }}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       {state.status === 'error' && state.message ? (
         <p role="alert" className="rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
           {state.message}
@@ -167,22 +215,30 @@ export const ContactForm = () => {
             name="kvkk"
             type="checkbox"
             required
-            aria-invalid={Boolean(errors.kvkk)}
-            aria-describedby={errors.kvkk ? 'kvkk-error' : undefined}
+            checked={kvkkAccepted}
+            onChange={(event) => {
+              // İşaretlemek metni açar; işaret penceredeki onayla konur. İşareti kaldırmak serbest.
+              if (event.target.checked) setKvkkOpen(true)
+              else setKvkkAccepted(false)
+            }}
+            aria-invalid={Boolean(kvkkError)}
+            aria-describedby={kvkkError ? 'kvkk-error' : undefined}
             className="mt-0.5 h-5 w-5 shrink-0 rounded border-border accent-[var(--color-primary)]"
           />
           <span>
-            <Link
-              href="/kvkk-aydinlatma-metni"
-              className="font-semibold text-link underline underline-offset-2"
+            <button
+              type="button"
+              onClick={() => setKvkkOpen(true)}
+              aria-haspopup="dialog"
+              className="font-semibold text-link underline underline-offset-2 transition-colors hover:text-primary-dark"
             >
               KVKK Aydınlatma Metni
-            </Link>
+            </button>
             ’ni okudum, kişisel verilerimin bu kapsamda işlenmesini kabul ediyorum.{' '}
             <span className="text-accent-dark">*</span>
           </span>
         </label>
-        <FieldError id="kvkk-error" message={errors.kvkk} />
+        <FieldError id="kvkk-error" message={kvkkError} />
       </div>
 
       <div>
@@ -191,6 +247,29 @@ export const ContactForm = () => {
           <span className="text-accent-dark">*</span> işaretli alanlar zorunludur.
         </p>
       </div>
+
+      <Modal
+        open={kvkkOpen}
+        onClose={() => setKvkkOpen(false)}
+        title={kvkkNoticeTitle}
+        icon={<ShieldCheckIcon />}
+        footer={
+          <>
+            <p className="hidden text-xs leading-relaxed text-text-muted md:mr-auto md:block">
+              Mesajınızı gönderebilmek için onayınız gereklidir.
+            </p>
+            <button type="button" onClick={rejectKvkk} className="btn btn-outline whitespace-nowrap">
+              Kabul Etmiyorum
+            </button>
+            <button type="button" onClick={acceptKvkk} className="btn btn-primary whitespace-nowrap">
+              <CheckIcon width={18} height={18} />
+              Okudum, Kabul Ediyorum
+            </button>
+          </>
+        }
+      >
+        {kvkkNotice}
+      </Modal>
     </form>
   )
 }

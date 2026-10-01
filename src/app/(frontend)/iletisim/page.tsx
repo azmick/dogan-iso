@@ -5,9 +5,10 @@ import { ContactForm } from '@/components/ContactForm'
 import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from '@/components/Icons'
 import { JsonLd } from '@/components/JsonLd'
 import { PageHero } from '@/components/PageHero'
+import { RichText } from '@/components/RichText'
 import { SocialLinks } from '@/components/SocialLinks'
 import { toTelHref, toWhatsAppHref } from '@/lib/format'
-import { getContactInfo, getSiteSettings } from '@/lib/payload'
+import { getContactInfo, getPageBySlug, getSiteSettings } from '@/lib/payload'
 import { buildMetadata, SITE_URL } from '@/lib/seo'
 import { ROUTES } from '@/lib/site'
 
@@ -15,6 +16,9 @@ export const revalidate = 300
 
 const DESCRIPTION =
   'Belgelendirme, denetim ve KVKK uyum hizmetlerimiz hakkında bilgi almak veya teklif istemek için bize ulaşın.'
+
+/** Formdaki açılır pencerenin metni panelde Sayfalar → "KVKK Aydınlatma Metni" kaydından gelir. */
+const KVKK_NOTICE_SLUG = 'kvkk-aydinlatma-metni'
 
 export const generateMetadata = async (): Promise<Metadata> =>
   buildMetadata({
@@ -24,7 +28,11 @@ export const generateMetadata = async (): Promise<Metadata> =>
   })
 
 export default async function ContactPage() {
-  const [contact, settings] = await Promise.all([getContactInfo(), getSiteSettings()])
+  const [contact, settings, kvkkNotice] = await Promise.all([
+    getContactInfo(),
+    getSiteSettings(),
+    getPageBySlug(KVKK_NOTICE_SLUG),
+  ])
 
   const siteName = settings?.siteName || 'Örnek ISO Belgelendirme'
 
@@ -173,7 +181,19 @@ export default async function ContactPage() {
               Formu doldurun, uzman ekibimiz en kısa sürede size dönüş yapsın.
             </p>
 
-            <ContactForm />
+            <ContactForm
+              kvkkNoticeTitle={kvkkNotice?.title || 'KVKK Aydınlatma Metni'}
+              kvkkNotice={
+                kvkkNotice?.content ? (
+                  <RichText data={kvkkNotice.content} className="text-[15px]" />
+                ) : (
+                  <p className="text-[15px] leading-relaxed text-text-muted">
+                    Aydınlatma metni henüz eklenmemiş. Yönetim panelinden{' '}
+                    <strong>Sayfalar → KVKK Aydınlatma Metni</strong> kaydını düzenleyebilirsiniz.
+                  </p>
+                )
+              }
+            />
           </div>
         </div>
       </div>
