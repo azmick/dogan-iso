@@ -166,12 +166,6 @@ export default async function ContactPage() {
                 linkClassName="border border-border text-primary hover:border-accent hover:bg-primary-soft"
               />
             </div>
-
-            <p className="mt-8 rounded-md border border-border bg-bg-soft p-4 text-xs leading-relaxed text-text-muted">
-              Buradaki adres, telefon ve e-posta bilgileri temsilidir. Yönetim panelindeki{' '}
-              <strong>Ayarlar → İletişim Bilgileri</strong> bölümünden gerçek bilgilerinizle
-              güncelleyebilirsiniz.
-            </p>
           </div>
 
           {/* Sağ sütun: form */}
