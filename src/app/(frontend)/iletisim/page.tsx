@@ -2,13 +2,7 @@ import type { Metadata } from 'next'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { ContactForm } from '@/components/ContactForm'
-import {
-  ClockIcon,
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon,
-  WhatsAppIcon,
-} from '@/components/Icons'
+import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from '@/components/Icons'
 import { JsonLd } from '@/components/JsonLd'
 import { PageHero } from '@/components/PageHero'
 import { SocialLinks } from '@/components/SocialLinks'
@@ -140,9 +134,7 @@ export default async function ContactPage() {
                       {href ? (
                         <a
                           href={href}
-                          {...(external
-                            ? { target: '_blank', rel: 'noopener noreferrer' }
-                            : {})}
+                          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           className="transition-colors hover:text-accent-dark"
                         >
                           {value}
@@ -176,7 +168,7 @@ export default async function ContactPage() {
 
           {/* Sağ sütun: form */}
           <div className="rounded-lg border border-border bg-bg p-6 shadow-[var(--shadow-card)] md:p-8">
-            <h2 className="section-title text-xl sm:text-2xl">Bize Yazın</h2>
+            <h2 className="section-title text-xl sm:text-2xl">Bize Ulaşın</h2>
             <p className="mb-8 mt-5 text-[15px] leading-relaxed text-text-muted">
               Formu doldurun, uzman ekibimiz en kısa sürede size dönüş yapsın.
             </p>
