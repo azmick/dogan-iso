@@ -17,7 +17,7 @@ const HERO_SLIDES: HeroSlide[] = [
     title: 'Bilgi Güvenliği Yönetim Sistemi Danışmanlığı',
     description:
       'ISO 27001 kapsamında kurumunuzun bilgi varlıklarını sınıflandırıyor, risk analizini yapıyor ve belgelendirme denetimine hazır hâle getiriyoruz.',
-    ctaLabel: 'Hizmeti İnceleyin',
+    ctaLabel: 'Hizmetleri İnceleyin',
     ctaHref: ROUTES.services,
     imageUrl: '/images/hero/bilgi-guvenligi.jpg',
     imageAlt: 'Bilgi güvenliği görseli',
