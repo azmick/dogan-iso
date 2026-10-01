@@ -2,13 +2,13 @@
 
 import { getContactInfo, getPayloadClient, getSiteSettings } from '@/lib/payload'
 
+// Not: 'use server' dosyası yalnızca async fonksiyon dışa aktarabilir (tipler serbest);
+// başlangıç durumu gibi değerler ContactForm içinde tanımlı.
 export type ContactFormState = {
   status: 'idle' | 'success' | 'error'
   message?: string
   errors?: Partial<Record<'name' | 'email' | 'phone' | 'subject' | 'message' | 'kvkk', string>>
 }
-
-export const initialContactFormState: ContactFormState = { status: 'idle' }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 

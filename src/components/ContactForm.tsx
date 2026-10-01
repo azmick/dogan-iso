@@ -1,15 +1,11 @@
 'use client'
 
-import { useActionState, useState, type FormEvent, type ReactNode } from 'react'
+import { useActionState, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { useFormStatus } from 'react-dom'
 
 import { CheckIcon, ShieldCheckIcon } from '@/components/Icons'
 import { Modal } from '@/components/Modal'
-import {
-  initialContactFormState,
-  submitContactForm,
-  type ContactFormState,
-} from '@/app/(frontend)/iletisim/actions'
+import { submitContactForm, type ContactFormState } from '@/app/(frontend)/iletisim/actions'
 
 type ContactFormProps = {
   /** Açılır pencerede gösterilen aydınlatma metni başlığı (paneldeki sayfa başlığı). */
@@ -17,6 +13,8 @@ type ContactFormProps = {
   /** Aydınlatma metninin kendisi — sunucuda hazırlanıp buraya verilir. */
   kvkkNotice: ReactNode
 }
+
+const initialContactFormState: ContactFormState = { status: 'idle' }
 
 const KVKK_REQUIRED_MESSAGE = 'Devam etmek için aydınlatma metnini onaylamanız gerekir.'
 
@@ -47,6 +45,22 @@ export const ContactForm = ({ kvkkNoticeTitle, kvkkNotice }: ContactFormProps) =
     submitContactForm,
     initialContactFormState,
   )
+
+  // React her gönderimden sonra formu form.reset() ile sıfırlar. Doğrulama hatasında
+  // yazılanlar ve KVKK onayı silinmesin diye bunu engelliyoruz (başarıda form zaten
+  // teşekkür mesajına dönüyor). React sıfırlamayı kendi olay sistemi kapalıyken yaptığı
+  // için onReset prop'u tetiklenmez; formun kendi dinleyicisi gerekir.
+  const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    const form = formRef.current
+    if (!form) return
+
+    const keepValues = (event: Event) => event.preventDefault()
+    form.addEventListener('reset', keepValues)
+
+    return () => form.removeEventListener('reset', keepValues)
+  }, [])
 
   // Onay yalnızca açılır penceredeki "Kabul Ediyorum" ile verilir.
   const [kvkkAccepted, setKvkkAccepted] = useState(false)
@@ -96,13 +110,9 @@ export const ContactForm = ({ kvkkNoticeTitle, kvkkNotice }: ContactFormProps) =
 
   return (
     <form
+      ref={formRef}
       action={formAction}
       onSubmit={handleSubmit}
-      // React gönderimden sonra formu sıfırlar; onay durumu da kutucukla birlikte sıfırlansın.
-      onReset={() => {
-        setKvkkAccepted(false)
-        setKvkkMissing(false)
-      }}
       noValidate
       className="flex flex-col gap-5"
     >
