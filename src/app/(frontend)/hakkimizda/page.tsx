@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { CardImage } from '@/components/CardImage'
 import { CtaBand } from '@/components/CtaBand'
 import { CheckIcon, ShieldCheckIcon } from '@/components/Icons'
 import { PageHero } from '@/components/PageHero'
@@ -60,7 +59,7 @@ export default function AboutPage() {
       <Breadcrumbs items={[{ label: 'Hakkımızda' }]} />
 
       <Section>
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
           <div className="rich-text">
             <h2 className="section-title text-2xl sm:text-3xl">Vegado Bilişim Kimdir?</h2>
 
@@ -78,33 +77,26 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div>
-            <CardImage
-              fallbackLabel="Kurumsal Görsel"
-              aspect="aspect-[4/3]"
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="rounded-lg border border-border shadow-[var(--shadow-card)]"
-            />
-
-            <dl className="mt-6 grid grid-cols-2 gap-4">
-              {STATS.map((stat) => (
-                <div
-                  key={stat.label}
-                  className={`rounded-lg border border-border bg-bg-soft px-4 py-5 text-center${
-                    stat.wide ? ' col-span-2' : ''
-                  }`}
-                >
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd>
-                    <span className="block text-2xl font-extrabold text-primary">{stat.value}</span>
-                    <span className="mt-1 block text-[11px] font-medium uppercase tracking-wider text-text-muted">
-                      {stat.label}
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <dl className="grid grid-cols-2 gap-4">
+            {STATS.map((stat) => (
+              <div
+                key={stat.label}
+                className={`rounded-lg border border-border bg-bg-soft px-4 py-6 text-center sm:py-8${
+                  stat.wide ? ' col-span-2' : ''
+                }`}
+              >
+                <dt className="sr-only">{stat.label}</dt>
+                <dd>
+                  <span className="block text-3xl font-extrabold text-primary sm:text-4xl">
+                    {stat.value}
+                  </span>
+                  <span className="mt-1.5 block text-[11px] font-medium uppercase tracking-wider text-text-muted sm:text-xs">
+                    {stat.label}
+                  </span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </Section>
 

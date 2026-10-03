@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { CardImage } from '@/components/CardImage'
 import { CtaBand } from '@/components/CtaBand'
 import { HeroSlider, type HeroSlide } from '@/components/HeroSlider'
 import { ArrowRightIcon, CheckIcon } from '@/components/Icons'
@@ -74,22 +73,6 @@ export default async function HomePage() {
       {/* ---------------- Hakkımızda özeti ---------------- */}
       <Section soft>
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="relative">
-            <CardImage
-              fallbackLabel="Kurumsal Tanıtım Görseli"
-              aspect="aspect-[4/3]"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="rounded-lg border border-border shadow-[var(--shadow-card)]"
-            />
-
-            <div className="absolute -bottom-6 -right-2 hidden rounded-lg bg-primary px-6 py-5 text-white shadow-[var(--shadow-card-hover)] sm:block lg:-right-6">
-              <p className="text-3xl font-extrabold leading-none">20+</p>
-              <p className="mt-1.5 text-xs font-medium uppercase tracking-wider text-white/70">
-                Yıllık tecrübe
-              </p>
-            </div>
-          </div>
-
           <div>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent-dark">
               Hakkımızda
@@ -105,22 +88,22 @@ export default async function HomePage() {
               kuruluşudur.
             </p>
 
-            <ul className="mt-7 space-y-3.5">
-              {HIGHLIGHTS.map((item) => (
-                <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-text">
-                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
-                    <CheckIcon width={13} height={13} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
             <Link href={ROUTES.about} className="btn btn-primary mt-8">
               Hakkımızda
               <ArrowRightIcon />
             </Link>
           </div>
+
+          <ul className="space-y-4 rounded-lg border border-border bg-bg p-6 shadow-[var(--shadow-card)] sm:p-8">
+            {HIGHLIGHTS.map((item) => (
+              <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-text">
+                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                  <CheckIcon width={13} height={13} />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </Section>
 
