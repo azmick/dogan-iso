@@ -171,7 +171,7 @@ LocalBusiness JSON-LD.
 6.10 Kurumsal / Yasal Sayfalar
 pages koleksiyonundan gelen basit içerik sayfaları: breadcrumb + H1 + richText.
 Sayfalar: KVKK Aydınlatma Metni, Çerez Politikası, KVKK Başvuru Formu, KVKK Rehberleri.
-Ayrıca: siteye çerez onay banner'ı (KVKK/çerez uyumu) ekle.
+Çerez onay banner'ı — KALDIRILDI. Müşteri kararı: sayfanın altında çıkan çerez bildirimi/onay bandı (CookieBanner) istenmiyor, yeniden eklenmeyecek. Çerez Politikası sayfası (/cerez-politikasi) yerinde kalır.
 6.11 SSS (/sss)
 Accordion soru-cevap listesi (faq koleksiyonundan). FAQPage JSON-LD (opsiyonel).
 7. Payload İçerik Modelleri (Collections & Globals)
@@ -203,7 +203,7 @@ Collections + Globals'ı tanımla; birkaç temsili kayıt gir.
 Global düzen: Header + Footer + Tailwind + renk token'ları + tipografi.
 Ana sayfa (bölümleriyle), veriyi Payload'dan çekerek.
 Hizmet detay (dinamik) + liste; sonra Blog.
-İletişim (form + harita + e-posta) + yasal sayfalar + SSS + çerez banner'ı.
+İletişim (form + harita + e-posta) + yasal sayfalar + SSS.
 SEO katmanı: metadata, sitemap.ts, robots.ts, JSON-LD, OpenGraph.
 Vercel Blob yapılandırması + deploy hazırlığı (migration, build ayarları).
 Her sayfada responsive ve SEO kontrolünü atlama (Bölüm 3).
