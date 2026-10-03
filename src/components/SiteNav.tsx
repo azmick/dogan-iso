@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useId, useState } from 'react'
+import { type MouseEvent, useEffect, useId, useState } from 'react'
 
 import { ChevronDownIcon, CloseIcon, MenuIcon } from '@/components/Icons'
 import type { NavItem } from '@/lib/site'
@@ -25,6 +25,10 @@ type MenuState = {
 
 const CLOSED: Omit<MenuState, 'path'> = { open: false, accordion: null }
 
+/** Masaüstü açılır menüyü gösteren sınıflar. */
+const DROPDOWN_VISIBLE =
+  'group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100'
+
 export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
   const pathname = usePathname()
   const [menu, setMenu] = useState<MenuState>({ path: pathname, ...CLOSED })
@@ -40,6 +44,19 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
 
   const setOpenAccordion = (accordion: string | null) =>
     setMenu({ path: pathname, open: current.open, accordion })
+
+  // Açık sayfanın bağlantısına tıklanınca adres değişmez; paneli elle kapat
+  const closeMobile = () => setMobileOpen(false)
+
+  // Bağlantısına tıklanan açılır menü; fare üzerinden çekilene kadar yeniden açılmaz
+  const [dismissed, setDismissed] = useState<string | null>(null)
+
+  const dismissDropdown = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    // Header sayfa geçişinde yeniden çizilmediği için bağlantıda kalan odak,
+    // `focus-within` yüzünden menüyü yeni sayfada da açık tutuyordu.
+    event.currentTarget.blur()
+    setDismissed(href)
+  }
 
   // Menü açıkken arka planın kaymasını engelle
   useEffect(() => {
@@ -86,10 +103,18 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
               )
             }
 
+            const isDismissed = dismissed === item.href
+
             return (
-              <li key={item.href} className="group relative">
+              <li
+                key={item.href}
+                className="group relative"
+                onMouseLeave={() => setDismissed(null)}
+                onFocus={() => setDismissed(null)}
+              >
                 <Link
                   href={item.href}
+                  onClick={dismissDropdown(item.href)}
                   aria-current={active ? 'page' : undefined}
                   aria-haspopup="true"
                   className={`inline-flex h-11 items-center gap-1 rounded-md px-3 text-[15px] font-semibold transition-colors ${
@@ -99,14 +124,21 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
                   }`}
                 >
                   {item.label}
-                  <ChevronDownIcon className="transition-transform group-hover:rotate-180" />
+                  <ChevronDownIcon
+                    className={`transition-transform ${isDismissed ? '' : 'group-hover:rotate-180'}`}
+                  />
                 </Link>
 
-                <ul className="invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-md border border-border bg-bg py-2 opacity-0 shadow-[var(--shadow-card-hover)] transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <ul
+                  className={`invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-md border border-border bg-bg py-2 opacity-0 shadow-[var(--shadow-card-hover)] transition-all duration-150 ${
+                    isDismissed ? '' : DROPDOWN_VISIBLE
+                  }`}
+                >
                   {item.children.map((child) => (
                     <li key={child.href}>
                       <Link
                         href={child.href}
+                        onClick={dismissDropdown(item.href)}
                         className="block border-l-2 border-transparent px-4 py-2.5 text-sm leading-snug text-text transition-colors hover:border-accent hover:bg-bg-soft hover:text-primary"
                       >
                         {child.label}
@@ -153,6 +185,7 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
                     <div className="flex items-center justify-between gap-2">
                       <Link
                         href={item.href}
+                        onClick={closeMobile}
                         aria-current={active ? 'page' : undefined}
                         className={`flex min-h-11 flex-1 items-center text-[15px] font-semibold ${
                           active ? 'text-accent-dark' : 'text-primary'
@@ -182,6 +215,7 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
                           <li key={child.href}>
                             <Link
                               href={child.href}
+                              onClick={closeMobile}
                               className="flex min-h-11 items-center text-sm leading-snug text-text-muted hover:text-primary"
                             >
                               {child.label}
@@ -195,7 +229,7 @@ export const SiteNav = ({ items, ctaHref, ctaLabel }: SiteNavProps) => {
               })}
             </ul>
 
-            <Link href={ctaHref} className="btn btn-accent mt-4 w-full">
+            <Link href={ctaHref} onClick={closeMobile} className="btn btn-accent mt-4 w-full">
               {ctaLabel}
             </Link>
           </nav>
